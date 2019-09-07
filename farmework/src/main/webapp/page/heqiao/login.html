@@ -1,0 +1,63 @@
+﻿<html><head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css">
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/login.css">
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript">
+	window.onload=function data(){
+		var src=window.location.href;
+		if(src.split("?").length>1){
+			if(src.split("?")[1]=="001"){alert("用户名或密码不存在！")}
+			if(src.split("?")[1]=="002"){alert("没有分配角色信息。")}
+			if(src.split("?")[1]=="003"){alert("系统繁忙")}
+		}
+	}
+	/* function addData() {
+		$.ajax({  
+      		type : 'POST',  
+       		url : base.serverContet+'/manager/loginIn/SysUserInfo/query.do',  
+     		data: $('#J_Form').serialize(),  
+      		async : false,  
+      		success : function(data) {  
+        	  	if(data.code=="LOGIN_0000"){
+        		    alert("登录成功");
+        		    window.location.href="index.html?user="+data.userInfo;
+               	  }else{
+            	    alert(data.msg);
+            	    return false;
+               	  }
+      		   },error : function() {}  
+  		}); 
+		}  */
+	
+	</script>
+</head>
+<body>
+<div class="page">
+	<div class="loginwarrp">
+		<div class="logo"><img src="/HeQiao/page/heqiao/images/logo.png" style="width:300px;"></div>
+		<div class="title">成旅商务中心审批管理系统</div>
+        <div class="login_form">
+			<form id="J_Form" name="Login" method="post" action="../../manager/loginIn/SysUserInfo/PcLogin.do">
+				<li class="login-item">
+					
+					<input type="text" name="loginName" class="login_input" placeholder="用户名">
+				</li>
+				<li class="login-item">
+					
+					<input type="password" name="loginPwd" class="login_input" placeholder="密    码">
+				</li>
+				
+				
+				<div class="clearfix"></div>
+				<li class="login-sub">
+					<input type="submit" name="Submit" value="登    录" ">
+				</li>                      
+           </form>
+		</div>
+	</div>
+</div>
+
+</body></html>

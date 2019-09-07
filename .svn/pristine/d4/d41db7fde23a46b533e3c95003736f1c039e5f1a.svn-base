@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes"/> 
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成旅集团内部审批管理系统公告</title>
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/app.css" />
+		<script src="../../resources/js/base.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript">
+		var index=1;
+		$(function(){
+			addData(index);
+		});
+		function nextPage(){
+			addData(++index);
+		}
+		function addData(currPage){
+			$.ajax({
+				url: base.serverContet+'/manager/loginIn/notice/queryListForWechat.do',
+				type:'get',
+				data:{currPage:currPage},
+				async:false,
+				success:function(data){
+						if(data.code=='000'){
+							if(data.pageOver){
+								$("#moreNotice").hide();
+							}
+							for (var k = 0; k < data.rows.length; k++) {
+								var notice=data.rows[k];
+								if(k%2==0){
+									$('.notice-ct').append("<li>"
+										+"<a class='fl ellipsis' href='noticeDetail.html?noteceId="+notice.noticeId+"'>"+notice.noticeTitle+"</a>"
+										+"<span class='fr pr-20'>"+notice.createTime.substring(0,10)+"</span>"
+										+"</li>");
+								}else{
+									$('.notice-ct').append("<li class='bgcolor-blue-tint'>"
+											+"<a class='fl ellipsis' href='noticeDetail.html?noteceId="+notice.noticeId+"'>"+notice.noticeTitle+"</a>"
+											+"<span class='fr pr-20'>"+notice.createTime.substring(0,10)+"</span>"
+											+"</li>");
+								}
+							}
+						}else{
+						} 				
+				},error:function(reg){
+				}
+			});
+		}
+		</script>
+	</head>
+	<body class="bgcolor-blue">
+		<div class="logo"><img src="image/logo2-01.png"/></div>
+		<div class="content mb-100">
+			<div class="detail-class">
+				<div class="title">系统公告</div>
+				<div class="notice">
+					<ul class="notice-ct">
+					</ul>					
+				</div>
+				<div id="moreNotice" class="more-notice"><a onclick="nextPage()" class="md-blue-btn">点击加载更多</a></div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="row">
+				<div class="col-6"><a href="index.html"><span ><img class="font-image" src="image/home.png"></span>首页</a></div>
+				<div class="col-6"><a href="notice.html"><span ><img class="font-image" src="image/info.png"></span>公告</a></div>
+			</div>
+		</div>		
+	</body>
+</html>
+<script src="js/rem.js"></script>

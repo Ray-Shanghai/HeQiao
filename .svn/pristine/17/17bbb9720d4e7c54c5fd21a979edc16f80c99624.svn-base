@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/js/skins/molv/laydate.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/js-date/skin/whyGreen/datepicker.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/laydate.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js-date/WdatePicker.js"></script>
+	<script src="/HeQiao/resources/js/base.js"></script>
+	<script src="/HeQiao/resources/js/title.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/assets/js/jquery-1.8.1.min.js"></script>
+  	<script type="text/javascript" src="/HeQiao/page/assets/js/template.js"></script>
+	
+	<style>
+	    .mold-select select{width:300px; height:40px; border:1px solid #ddd;font-size:20px; color:#0098c5; padding-left:20px;}
+	    .mold-select select option{ padding-left:20px;}
+	    .mold-select{font-size:20px; color:#0098c5; margin-bottom:30px; font-weight:600;}
+	</style>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr>
+						<th id="title" class="th" colspan="2">请假申请流程</th>
+					</tr>
+					<tr>
+						<td  colspan="2" style="padding:70px 0;">
+						   <div class="mold-select">请选择申请类型：&emsp;
+						   <select id="sendType">
+						   </select>
+						   </div>
+						  <!--  <div class="mold-select">送审公司：&emsp;
+						   <span>${user.unitName}</span>
+						   <input readonly="readonly" name="unitName" value="${user.unitName}" type="hidden">
+						   </div> -->
+						</td>
+					</tr>													
+				</table>
+				<div class="subBtn" style="text-align:center; margin-top:50px;">
+				<input type="button" id="nextBut"  value="下一步"></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			/* window.localStorage.setItem("unitName","${user.unitName}");
+			window.localStorage.setItem("unitId","${user.unitId}"); */
+			window.localStorage.setItem("userName","${user.userName}");
+			window.localStorage.setItem("departName","${user.departName}");
+			window.localStorage.setItem("departId","${user.departId}");
+			window.localStorage.setItem("authorityName","${user.authorityName}");
+			$.ajax({
+				url:base.serverContet+'/manager/loginIn/SysZhiChuType/zcTypeDataList.do',
+				async:false,
+				type:'post',
+				dataType:'json',
+				success:function(result){
+					var html="<option value='1'>请选择</option>";
+					for(var i=0; i<result.length;i++){
+						if(result[i].zcId.substring(0,1)=='2'){
+							html+="<option value='"+result[i].zcId+"'>"+result[i].zcTypeName+"</option>";
+						}
+					}
+					$("#sendType").append(html);
+					
+					
+				}
+			});
+			
+			$("#sendType").change(function(){
+				//alert($(this).val());
+				window.localStorage.setItem("zcId",$(this).val());
+				window.localStorage.setItem("zcTypeName",$(this).children('option:selected').text());
+			})
+			
+			
+			
+			$("#nextBut").click(function(){
+				if($("#sendType").val()=="1"){
+					alert("请选择类型！");
+				}else{
+					 window.parent.document.getElementById('mainframe').src=base.serverContet+'/page/heqiao/applyNote/leave_note.html';
+				}
+			})
+		});
+	</script>
+</body>
+</html>

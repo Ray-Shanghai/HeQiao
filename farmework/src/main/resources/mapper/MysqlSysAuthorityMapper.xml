@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sd.farmework.mapper.SysAuthorityMapper">
+
+	<resultMap type="com.sd.farmework.pojo.SysAuthority" id="sysAuthorityMapForMysql">
+
+		<result column="sys_id" property="sysId" />
+		<result column="authority_id" property="authorityId" />
+		<result column="authority_name" property="authorityName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+	</resultMap>
+	
+	<select id="queryListByPageForMysql" parameterType="com.sd.farmework.pojo.SysAuthority"
+		resultMap="sysAuthorityMapForMysql">
+		select sys_id,
+		authority_id,
+		authority_name,
+		create_user_id,
+		create_user_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		create_time
+		from sys_authority where 1=1
+		<if test="authorityName!=null and authorityName!=''">
+			and authority_name like concat('%',#{authorityName},'%')
+		</if>
+		order by create_time desc
+		LIMIT #{startRecod},#{pageSize}
+	</select>
+	
+	<select id="queryCountForMysql"  parameterType="com.sd.farmework.pojo.SysAuthority"  resultType="java.lang.Integer">
+   		select    count(*) from sys_authority where   1=1
+		<if test="authorityName!=null and authorityName!=''">
+			and authority_name like concat('%',#{authorityName},'%')
+		</if>
+	</select>
+	
+	<insert id="addForMysql" parameterType="com.sd.farmework.pojo.SysAuthority"
+		useGeneratedKeys="true" keyProperty="sysId">
+		insert into sys_authority
+		(
+		authority_id,
+		authority_name,
+		create_user_id,
+		create_user_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		create_time
+		 )
+		values
+		(
+		#{authorityId},
+		#{authorityName},
+		#{createUserId},
+		#{createUserName},
+		#{createDepartId},
+		#{createDepartName},
+		#{createUnitId},
+		#{createUnitName},
+		sysdate()
+		 )
+	</insert>
+
+	<update id="updateForMysql" parameterType="com.sd.farmework.pojo.SysAuthority">
+		UPDATE sys_authority SET
+		authority_id=#{authorityId},
+		authority_name=#{authorityName},
+		last_update_TIME=now(),
+		last_update_user_id = #{lastUpdateUserId},
+		last_update_user_name = #{lastUpdateUserName},
+		last_update_team_id = #{lastUpdateTeamId},
+		last_update_team_name = #{lastUpdateTeamName},
+		last_update_depart_id = #{lastUpdateDepartId},
+		last_update_depart_name = #{lastUpdateDepartName},
+		last_update_unit_id = #{lastUpdateUnitId},
+		last_update_unit_name = #{lastUpdateUnitName}
+		WHERE sys_id=#{sysId}
+	</update>
+	
+	<!-- 根据主键查询出职权信息 -->
+	<select id="queryByPkIdForMysql" parameterType="String"
+		resultMap="sysAuthorityMapForMysql">
+		SELECT * FROM sys_authority WHERE  authority_id=#{authorityId}
+	</select>
+	
+	<!-- 查询所有职权信息 -->
+	<select id="queryListForMysql" resultMap="sysAuthorityMapForMysql" parameterType="com.sd.farmework.pojo.SysAuthority">
+		select * from sys_authority t  order by cast(t.authority_id as UNSIGNED INTEGER)
+	</select>
+	
+	
+	<delete id="deleteForMysql" parameterType="com.sd.farmework.pojo.SysAuthority">
+		delete from sys_authority WHERE sys_id=#{sysId} 
+	</delete>
+</mapper> 
+

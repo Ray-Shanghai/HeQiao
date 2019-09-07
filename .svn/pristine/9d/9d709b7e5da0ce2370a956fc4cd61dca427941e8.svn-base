@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.sd.farmework.mapper.HqFileInfoMapper"> 
+
+	<resultMap type="com.sd.farmework.pojo.HqFileInfo" id="hqfileinfomap"> 
+
+		<result column="file_id" property="fileId"/>
+		<result column="file_name" property="fileName"/>
+		<result column="file_desc" property="fileDesc"/>
+		<result column="file_type" property="fileType"/>
+		<result column="REMARK" property="remark"/>
+		<result column="STATUS" property="status"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="CREATE_USER_ID" property="createUserId"/>
+		<result column="CREATE_USER_NAME" property="createUserName"/>
+		<result column="CREATE_TEAM_ID" property="createTeamId"/>
+		<result column="CREATE_TEAM_NAME" property="createTeamName"/>
+		<result column="CREATE_DEPART_ID" property="createDepartId"/>
+		<result column="CREATE_DEPART_NAME" property="createDepartName"/>
+		<result column="CREATE_UNIT_ID" property="createUnitId"/>
+		<result column="CREATE_UNIT_NAME" property="createUnitName"/>
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime"/>
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"/>
+		<result column="LAST_UPDATE_USER_NAME" property="lastUpdateUserName"/>
+		<result column="LAST_UPDATE_TEAM_ID" property="lastUpdateTeamId"/>
+		<result column="LAST_UPDATE_TEAM_NAME" property="lastUpdateTeamName"/>
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId"/>
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName"/>
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId"/>
+		<result column="LAST_UPDATE_UNIT_NAME" property="lastUpdateUnitName"/>
+
+	</resultMap>
+	<update id="updateForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo">
+		UPDATE hq_file_info set 
+		file_name=#{fileName},
+		file_desc=#{fileDesc},
+		file_type=#{fileType},
+		STATUS=#{status},
+		LAST_UPDATE_TIME=now(),
+		LAST_UPDATE_USER_ID=#{lastUpdateUserId},
+		LAST_UPDATE_USER_NAME=#{lastUpdateUserName},
+		LAST_UPDATE_TEAM_ID=#{lastUpdateTeamId},
+		LAST_UPDATE_TEAM_NAME=#{lastUpdateTeamName},
+		LAST_UPDATE_DEPART_ID=#{lastUpdateDepartId},
+		LAST_UPDATE_DEPART_NAME=#{lastUpdateDepartName},
+		LAST_UPDATE_UNIT_ID=#{lastUpdateUnitId},
+		LAST_UPDATE_UNIT_NAME=#{lastUpdateUnitName}
+		where file_id=#{fileId}
+	</update>
+	<select id="queryByPkIdForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo"  resultMap="hqfileinfomap">
+		SELECT 
+		t.file_id,
+		t.file_name,
+		t.file_desc,
+		t.file_type,
+		t.REMARK,
+		t.STATUS
+		FROM  hq_file_info t 
+		where  1 =1 
+	</select>
+	<select id="queryForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo"  resultMap="hqfileinfomap">
+		SELECT 
+		t.file_id,
+		t.file_name,
+		t.file_desc,
+		t.file_type,
+		t.REMARK,
+		t.STATUS,
+		t.CREATE_TIME,
+		t.CREATE_USER_ID,
+		t.CREATE_USER_NAME,
+		t.CREATE_TEAM_ID,
+		t.CREATE_TEAM_NAME,
+		t.CREATE_DEPART_ID,
+		t.CREATE_DEPART_NAME,
+		t.CREATE_UNIT_ID,
+		t.CREATE_UNIT_NAME,
+		t.LAST_UPDATE_TIME,
+		t.LAST_UPDATE_USER_ID,
+		t.LAST_UPDATE_USER_NAME,
+		t.LAST_UPDATE_TEAM_ID,
+		t.LAST_UPDATE_TEAM_NAME,
+		t.LAST_UPDATE_DEPART_ID,
+		t.LAST_UPDATE_DEPART_NAME,
+		t.LAST_UPDATE_UNIT_ID,
+		t.LAST_UPDATE_UNIT_NAME
+		FROM  hq_file_info t 
+		where  1 =1 
+	</select>
+	<select id="queryListByPageForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo"  resultMap="hqfileinfomap">
+		SELECT  
+		t.file_id,
+		t.file_name,
+		t.file_desc,
+		t.file_type,
+		t.REMARK,
+		t.STATUS,
+		t.CREATE_TIME,
+		t.CREATE_USER_ID,
+		t.CREATE_USER_NAME,
+		t.CREATE_TEAM_ID,
+		t.CREATE_TEAM_NAME,
+		t.CREATE_DEPART_ID,
+		t.CREATE_DEPART_NAME,
+		t.CREATE_UNIT_ID,
+		t.CREATE_UNIT_NAME,
+		t.LAST_UPDATE_TIME,
+		t.LAST_UPDATE_USER_ID,
+		t.LAST_UPDATE_USER_NAME,
+		t.LAST_UPDATE_TEAM_ID,
+		t.LAST_UPDATE_TEAM_NAME,
+		t.LAST_UPDATE_DEPART_ID,
+		t.LAST_UPDATE_DEPART_NAME,
+		t.LAST_UPDATE_UNIT_ID,
+		t.LAST_UPDATE_UNIT_NAME
+		FROM  hq_file_info t  where  1=1
+		
+		<if test="fileName!=null">
+			and file_name like concat('%',#{fileName},'%')
+		</if>
+		
+		   LIMIT  #{startRecod},#{pageSize} 
+	</select>
+	<select id="queryListForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo"  resultMap="hqfileinfomap">
+		SELECT 
+		t.file_id,
+		t.file_name,
+		t.file_desc,
+		t.file_type,
+		t.REMARK,
+		t.STATUS,
+		t.CREATE_TIME,
+		t.CREATE_USER_ID,
+		t.CREATE_USER_NAME,
+		t.CREATE_TEAM_ID,
+		t.CREATE_TEAM_NAME,
+		t.CREATE_DEPART_ID,
+		t.CREATE_DEPART_NAME,
+		t.CREATE_UNIT_ID,
+		t.CREATE_UNIT_NAME,
+		t.LAST_UPDATE_TIME,
+		t.LAST_UPDATE_USER_ID,
+		t.LAST_UPDATE_USER_NAME,
+		t.LAST_UPDATE_TEAM_ID,
+		t.LAST_UPDATE_TEAM_NAME,
+		t.LAST_UPDATE_DEPART_ID,
+		t.LAST_UPDATE_DEPART_NAME,
+		t.LAST_UPDATE_UNIT_ID,
+		t.LAST_UPDATE_UNIT_NAME
+		FROM  hq_file_info t
+		where t.STATUS='Y'
+	</select>
+	<insert id="addForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo">
+	insert into hq_file_info
+	(
+		file_name,
+		file_desc,
+		file_type,
+		status,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME
+	)
+	values
+	(
+		#{fileName},
+		#{fileDesc},
+		#{fileType},
+		#{status},
+		now(),
+	    #{createUserId},
+	    #{createUserName},
+	    #{createTeamId},
+	    #{createTeamName},
+	    #{createDepartId},
+	    #{createDepartName},
+	    #{createUnitId},
+	    #{createUnitName} 
+	)
+	</insert>
+	<delete id="deleteForMysql" parameterType="com.sd.farmework.pojo.HqFileInfo">
+		delete from hq_file_info where 1=2 
+	</delete>
+	<select id="queryCountForMysql"  parameterType="com.sd.farmework.pojo.HqFileInfo"  resultType="java.lang.Integer">
+   		select count(*) from hq_file_info where   1=1
+		<if test="fileName!=null">
+			and file_name like concat('%',#{fileName},'%')
+		</if>
+	</select>
+</mapper> 
+

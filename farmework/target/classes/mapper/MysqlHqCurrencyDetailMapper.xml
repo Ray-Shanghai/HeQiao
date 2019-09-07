@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sd.farmework.mapper.HqCurrencyDetailMapper">
+
+	<resultMap type="com.sd.farmework.pojo.HqCurrencyDetail" id="HqCurrencyDetailMapForMysql">
+
+		<result column="detail_id" property="detailId" />
+		<result column="file_name" property="fileName" />
+		<result column="file_path" property="filePath" />
+		<result column="currency_id" property="currencyId" />
+
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="STATUS" property="status" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+
+	</resultMap>
+	<insert id="addBatchForMysql" parameterType="java.util.List">
+		insert into hq_currency_detail
+		(
+		file_name,
+		file_path,
+		currency_id,
+		create_user_id,
+		create_user_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		create_time
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.fileName},
+			#{item.filePath},
+			#{item.currencyId},
+			#{item.createUserId},
+			#{item.createUserName},
+			#{item.createDepartId},
+			#{item.createDepartName},
+			#{item.createUnitId},
+			#{item.createUnitName},
+			sysdate()
+			)
+		</foreach>
+	</insert>
+	<select id="queryListForMysql" parameterType="com.sd.farmework.pojo.HqCurrencyDetail"
+		resultMap="HqCurrencyDetailMapForMysql">
+		SELECT
+		detail_id,
+		file_name,
+		file_path,
+		currency_id,
+		REMARK,
+		STATUS,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME,
+		LAST_UPDATE_TIME,
+		LAST_UPDATE_USER_ID,
+		LAST_UPDATE_USER_NAME,
+		LAST_UPDATE_TEAM_ID,
+		LAST_UPDATE_TEAM_NAME,
+		LAST_UPDATE_DEPART_ID,
+		LAST_UPDATE_DEPART_NAME,
+		LAST_UPDATE_UNIT_ID,
+		LAST_UPDATE_UNIT_NAME
+		FROM hq_currency_detail where currency_id =#{currencyId}
+
+	</select>
+
+</mapper> 
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes"/> 
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成旅集团内部审批管理系统公告详情</title>
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/css/normalize.css">
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/css/app.css" />
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/fonts/iconfont.css" />
+		<script src="/HeQiao/resources/js/base.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/rem.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/noticeDetail.js"></script>
+		
+	</head>
+	<body class="bgcolor-blue">
+		<div class="logo"><img src="image/logo2-01.png"/></div>
+		<div class="content pb-100">
+			<div class="detail-content">
+				<div class="title" id="noticeTitle"></div>
+				<div class="send-date fr" id="createDate"></div>
+				<div style="clear: both;"></div>
+				<div class="all-content" id="noticeContent"></div>
+			    <div class="send-from fr mt-20" id="noticeDepartment"></div>
+			    <div style="clear:both;" class="file"></div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="row">
+				<div class="col-6"><a href="index.html"><span ><img class="font-image" src="image/home.png"></span>首页</a></div>
+				<div class="col-6"><a href="notice.html"><span ><img class="font-image" src="image/info.png"></span>公告</a></div>
+			</div>
+		</div>	
+	</body>
+</html>

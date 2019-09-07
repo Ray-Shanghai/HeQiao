@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sd.farmework.mapper.SysUserInfoMapper">
+
+	<resultMap type="com.sd.farmework.pojo.SysUserInfo" id="SysUserInfoMapForMysql">
+		<result column="TEAM_ID" property="teamId" />
+		<result column="TEAM_NAME" property="teamName" />
+		<result column="DEPART_ID" property="departId" />
+		<result column="DEPART_NAME" property="departName" />
+		<result column="USER_NO" property="userNo" />
+		<result column="UNIT_ID" property="unitId" />
+		<result column="UNIT_NAME" property="unitName" />
+		<result column="LOGIN_NAME" property="loginName" />
+		<result column="LOGIN_PWD" property="loginPwd" />
+		<result column="USER_ID" property="userId" />
+		<result column="EMPLOYEE_ID" property="employeeId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="wx_openid" property="wxOpenId" />
+		<result column="authority_id" property="authorityId" />
+		<result column="authority_name" property="authorityName" />
+		
+		
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="REMARK" property="remark" />
+		<result column="STATUS" property="status" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_TEAM_ID" property="createTeamId" />
+		<result column="CREATE_TEAM_NAME" property="createTeamName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_TEAM_ID" property="lastUpdateTeamId" />
+		<result column="LAST_UPDATE_TEAM_NAME" property="lastUpdateTeamName" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+		<result column="postion" property="postion" />
+		<result column="depart_power" property="departPower" />
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+
+	</resultMap>
+	<update id="updateForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo">
+		update sys_user_info
+		set
+		user_name = #{userName},
+		login_pwd = #{loginPwd},
+		team_id = #{teamId},
+		team_name = #{teamName},
+		depart_id = #{departId},
+		depart_name = #{departName},
+		unit_id = #{unitId},
+		unit_name = #{unitName},
+		status = #{status},
+		last_update_TIME=now(),
+		last_update_user_id = #{lastUpdateUserId},
+		last_update_user_name = #{lastUpdateUserName},
+		last_update_team_id = #{lastUpdateTeamId},
+		last_update_team_name = #{lastUpdateTeamName},
+		last_update_depart_id = #{lastUpdateDepartId},
+		last_update_depart_name = #{lastUpdateDepartName},
+		last_update_unit_id = #{lastUpdateUnitId},
+		last_update_unit_name = #{lastUpdateUnitName},
+		postion = #{postion},
+		depart_power = #{departPower},
+		authority_id = #{authorityId},
+		authority_name = #{authorityName}
+		where user_id = #{userId}
+
+	</update>
+	<!-- 通过用户id修改密码 -->
+	<update id="updatePwdByUserId" parameterType="com.sd.farmework.pojo.SysUserInfo">
+		update
+		sys_user_info set
+		login_pwd = #{loginPwd},
+		last_update_TIME=now(),
+		last_update_user_id = #{lastUpdateUserId},
+		last_update_user_name = #{lastUpdateUserName},
+		last_update_team_id = #{lastUpdateTeamId},
+		last_update_team_name = #{lastUpdateTeamName},
+		last_update_depart_id = #{lastUpdateDepartId},
+		last_update_depart_name = #{lastUpdateDepartName},
+		last_update_unit_id = #{lastUpdateUnitId},
+		last_update_unit_name = #{lastUpdateUnitName}
+		where user_id = #{userId}
+
+	</update>
+	<!-- 通过用户id修改用户名称 -->
+	<update id="updateNameByUserId" parameterType="com.sd.farmework.pojo.SysUserInfo">
+		update
+		sys_user_info set
+		user_name = #{userName},
+		last_update_TIME=now(),
+		last_update_user_id = #{lastUpdateUserId},
+		last_update_user_name = #{lastUpdateUserName},
+		last_update_team_id = #{lastUpdateTeamId},
+		last_update_team_name = #{lastUpdateTeamName},
+		last_update_depart_id = #{lastUpdateDepartId},
+		last_update_depart_name = #{lastUpdateDepartName},
+		last_update_unit_id = #{lastUpdateUnitId},
+		last_update_unit_name = #{lastUpdateUnitName}
+		where user_id = #{userId}
+	</update>
+	<select id="queryByPkIdForMysql" parameterType="String"
+		resultMap="SysUserInfoMapForMysql">
+		SELECT
+		USER_ID,
+		EMPLOYEE_ID,
+		USER_NAME,
+		LOGIN_NAME,
+		LOGIN_PWD,
+		TEAM_ID,
+		TEAM_NAME,
+		DEPART_ID,
+		DEPART_NAME,
+		UNIT_ID,
+		UNIT_NAME,
+		USER_NO,
+		authority_id,
+		authority_Name,
+		REMARK,
+		STATUS,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME,
+		LAST_UPDATE_TIME,
+		LAST_UPDATE_USER_ID,
+		LAST_UPDATE_USER_NAME,
+		LAST_UPDATE_TEAM_ID,
+		LAST_UPDATE_TEAM_NAME,
+		LAST_UPDATE_DEPART_ID,
+		LAST_UPDATE_DEPART_NAME,
+		LAST_UPDATE_UNIT_ID,
+		LAST_UPDATE_UNIT_NAME,
+		postion,
+		depart_power
+		FROM sys_user_info t
+		where USER_ID =#{userId}
+	</select>
+	<select id="queryForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo"
+		resultMap="SysUserInfoMapForMysql">
+		select
+		USER_ID,
+		EMPLOYEE_ID,
+		USER_NAME,
+		LOGIN_NAME,
+		LOGIN_PWD,
+		TEAM_ID,
+		TEAM_NAME,
+		DEPART_ID,
+		DEPART_NAME,
+		UNIT_ID,
+		UNIT_NAME,
+		wx_openid,
+		USER_NO,
+		authority_id,
+		authority_Name,
+		REMARK,
+		STATUS,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME,
+		LAST_UPDATE_TIME,
+		LAST_UPDATE_USER_ID,
+		LAST_UPDATE_USER_NAME,
+		LAST_UPDATE_TEAM_ID,
+		LAST_UPDATE_TEAM_NAME,
+		LAST_UPDATE_DEPART_ID,
+		LAST_UPDATE_DEPART_NAME,
+		LAST_UPDATE_UNIT_ID,
+		LAST_UPDATE_UNIT_NAME,
+		postion,
+		depart_power
+		from sys_user_info t
+		where LOGIN_NAME =#{loginName} and LOGIN_PWD=
+		#{loginPwd} and STATUS = 'Y'
+	</select>
+	<!-- 根据账号规则查询信息 -->
+	<select id="queryAccountAuleForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo"
+		resultMap="SysUserInfoMapForMysql">
+		select
+		USER_ID,
+		EMPLOYEE_ID,
+		USER_NAME,
+		LOGIN_NAME,
+		LOGIN_PWD,
+		TEAM_ID,
+		TEAM_NAME,
+		DEPART_ID,
+		DEPART_NAME,
+		UNIT_ID,
+		UNIT_NAME,
+		wx_openid,
+		USER_NO,
+		authority_id,
+		authority_Name,
+		REMARK,
+		STATUS,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME,
+		LAST_UPDATE_TIME,
+		LAST_UPDATE_USER_ID,
+		LAST_UPDATE_USER_NAME,
+		LAST_UPDATE_TEAM_ID,
+		LAST_UPDATE_TEAM_NAME,
+		LAST_UPDATE_DEPART_ID,
+		LAST_UPDATE_DEPART_NAME,
+		LAST_UPDATE_UNIT_ID,
+		LAST_UPDATE_UNIT_NAME,
+		postion,
+		depart_power
+		from sys_user_info t
+		where 1=1
+		<if test="loginName!=null and loginName!=''">
+			and login_name like concat(#{loginName},'%')
+		</if>
+	</select>
+	
+	<select id="queryListByPageForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo"
+		resultMap="SysUserInfoMapForMysql">
+		select user_id,
+		employee_id,team_id,team_name, user_name, login_name,
+		login_pwd,
+		depart_id, depart_name, unit_id, unit_name, user_no,
+		authority_id,
+		authority_Name,
+		 remark,
+		status,
+		create_time,
+		create_user_id, create_user_name, create_team_id, create_team_name,
+		create_depart_id, create_depart_name, create_unit_id,
+		create_unit_name,
+		last_update_time, last_update_user_id,
+		last_update_user_name,
+		last_update_team_id, last_update_team_name,
+		last_update_depart_id,
+		last_update_depart_name, last_update_unit_id,
+		last_update_unit_name,postion,depart_power
+		from sys_user_info where 1=1
+		<if test="userName!=null and userName!=''">
+			and user_name like concat('%',#{userName},'%')
+		</if>
+		<if test="loginName!=null and loginName!=''">
+			and login_name like concat('%',#{loginName},'%')
+		</if>
+		<if test="unitName!=null and unitName!=''">
+			and UNIT_NAME like concat('%',#{unitName},'%')
+		</if>
+		<if test="departName!=null and departName!=''">
+			and depart_NAME like concat('%',#{departName},'%')
+		</if>
+		<if test="teamName!=null and teamName!=''">
+			and Team_NAME like concat('%',#{teamName},'%')
+		</if>
+
+		order by create_time desc
+
+		LIMIT #{startRecod},#{pageSize}
+	</select>
+	<select id="queryListForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo"
+		resultMap="SysUserInfoMapForMysql">
+		select user_id, employee_id, user_name, login_name, login_pwd,team_id,
+		team_name, depart_id, depart_name, unit_id, unit_name, user_no,
+		authority_id,
+		authority_Name,
+		remark, status, create_time, create_user_id, create_user_name,
+		create_team_id, create_team_name, create_depart_id,
+		create_depart_name, create_unit_id, create_unit_name,
+		last_update_time, last_update_user_id, last_update_user_name,
+		last_update_team_id, last_update_team_name, last_update_depart_id,
+		last_update_depart_name, last_update_unit_id, last_update_unit_name,postion,depart_power
+		from sys_user_info t
+		where 1=1
+		<if test="userName!=null and userName!=''">
+			and user_name like concat('%',#{userName},'%')
+		</if>
+		<if test="loginName!=null and loginName!=''">
+			and login_name like concat('%',#{loginName},'%')
+		</if>
+		<if test="unitName!=null and unitName!=''">
+			and UNIT_NAME like concat('%',#{unitName},'%')
+		</if>
+		<if test="departName!=null and departName!=''">
+			and DEPART_NAME like concat('%',#{departName},'%')
+		</if>
+		<if test="teamName!=null and teamName!=''">
+			and TEAM_NAME like concat('%',#{teamName},'%')
+		</if>
+		<if test="status!=null and status!=''">
+			and STATUS like concat('%',#{status},'%')
+		</if>
+	</select>
+	<insert id="addForMysql" useGeneratedKeys="true" keyProperty="userId"
+		parameterType="com.sd.farmework.pojo.SysUserInfo">
+
+		insert into sys_user_info
+		(
+		user_name,
+		login_name,
+		login_pwd,
+		team_id,
+		team_name,
+		depart_id,
+		depart_name,
+		unit_id,
+		unit_name,
+		create_user_id,
+		create_user_name,
+		create_team_id,
+		create_team_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		postion,
+		depart_power,
+		authority_id,
+		authority_name
+		)
+		values
+		(
+		#{userName},
+		#{loginName},
+		#{loginPwd},
+		#{teamId},
+		#{teamName},
+		#{departId},
+		#{departName},
+		#{unitId},
+		#{unitName},
+		#{createUserId},
+		#{createUserName},
+		#{createTeamId},
+		#{createTeamName},
+		#{createDepartId},
+		#{createDepartName},
+		#{createUnitId},
+		#{createUnitName},
+		#{postion},
+		#{departPower},
+		#{authorityId},
+		#{authorityName}
+		)
+
+
+	</insert>
+	
+	<!-- 批量添加用户数据 -->
+	<insert id="addBatchForMysql" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="userId">
+		    insert into sys_user_info
+			(
+				user_name,
+				login_name,
+				login_pwd,
+				team_id,
+				team_name,
+				depart_id,
+				depart_name,
+				unit_id,
+				unit_name,
+				create_user_id,
+				create_user_name,
+				create_team_id,
+				create_team_name,
+				create_depart_id,
+				create_depart_name,
+				create_unit_id,
+				create_unit_name,
+				postion,
+				depart_power,authority_id,authority_name
+			) 
+			values
+			<foreach collection="list" item="SysUserInfo" separator="," >
+			(
+				#{SysUserInfo.userName},
+				#{SysUserInfo.loginName},
+				#{SysUserInfo.loginPwd},
+				#{SysUserInfo.teamId},
+				#{SysUserInfo.teamName},
+				#{SysUserInfo.departId},
+				#{SysUserInfo.departName},
+				#{SysUserInfo.unitId},
+				#{SysUserInfo.unitName},
+				#{SysUserInfo.createUserId},
+				#{SysUserInfo.createUserName},
+				#{SysUserInfo.createTeamId},
+				#{SysUserInfo.createTeamName},
+				#{SysUserInfo.createDepartId},
+				#{SysUserInfo.createDepartName},
+				#{SysUserInfo.createUnitId},
+				#{SysUserInfo.createUnitName},
+				#{SysUserInfo.postion},
+				#{SysUserInfo.departPower},
+				#{SysUserInfo.authorityId},
+				#{SysUserInfo.authorityName}
+			) 
+			</foreach> 
+	</insert> 
+	
+	
+	<select id="queryCountForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo"
+		resultType="java.lang.Integer">
+		select count(*) from sys_user_info where 1=1
+		<if test="userName!=null and userName!=''">
+			and user_name like concat('%',#{userName},'%')
+		</if>
+		<if test="loginName!=null and loginName!=''">
+			and login_name like concat('%',#{loginName},'%')
+		</if>
+		<if test="unitName!=null and unitName!=''">
+			and UNIT_NAME like concat('%',#{unitName},'%')
+		</if>
+		<if test="departName!=null and departName!=''">
+			and depart_NAME like concat('%',#{departName},'%')
+		</if>
+		<if test="teamName!=null and teamName!=''">
+			and Team_NAME like concat('%',#{teamName},'%')
+		</if>
+		<if test="status!=null and status!=''">
+			and STATUS like concat('%',#{status},'%')
+		</if>
+	</select>
+	<!-- 根据账号修改密码 -->
+	<update id="updataPwdByAccount" parameterType="com.sd.farmework.pojo.SysUserInfo">
+		update
+		sys_user_info set
+		login_pwd = #{loginPwd}
+		where LOGIN_NAME =
+		#{loginName}
+
+	</update>
+		<!-- 根据账号修改openId -->
+	<update id="updateOpenIdByUserId" parameterType="com.sd.farmework.pojo.SysUserInfo">
+		update
+		sys_user_info set
+		wx_openid = #{wxOpenId}
+		where user_id =
+		#{userId}
+
+	</update>
+	<!-- 根据微信openid查询 -->
+	<select id="queryUserInfoByOpenId" parameterType="com.sd.farmework.pojo.SysUserInfo"
+		resultMap="SysUserInfoMapForMysql">
+		select
+		USER_ID,
+		EMPLOYEE_ID,
+		USER_NAME,
+		LOGIN_NAME,
+		LOGIN_PWD,
+		TEAM_ID,
+		TEAM_NAME,
+		DEPART_ID,
+		DEPART_NAME,
+		UNIT_ID,
+		UNIT_NAME,
+		USER_NO,
+		wx_openid,
+		REMARK,
+		STATUS,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME,
+		LAST_UPDATE_TIME,
+		LAST_UPDATE_USER_ID,
+		LAST_UPDATE_USER_NAME,
+		LAST_UPDATE_TEAM_ID,
+		LAST_UPDATE_TEAM_NAME,
+		LAST_UPDATE_DEPART_ID,
+		LAST_UPDATE_DEPART_NAME,
+		LAST_UPDATE_UNIT_ID,
+		LAST_UPDATE_UNIT_NAME,
+		postion,
+		depart_power,authority_id,authority_name
+		from sys_user_info t
+		where STATUS = 'Y' and login_name = #{wxOpenId}
+	</select>
+	<!-- 根据审批人的职位和部门id查出对应的loginName -->
+	<select id="queryUserByPostionAndDepart" parameterType="com.sd.farmework.pojo.SysUserInfo" resultMap="SysUserInfoMapForMysql">
+		SELECT
+		USER_ID,
+		EMPLOYEE_ID,
+		USER_NAME,
+		LOGIN_NAME,
+		LOGIN_PWD,
+		TEAM_ID,
+		TEAM_NAME,
+		DEPART_ID,
+		DEPART_NAME,
+		UNIT_ID,
+		UNIT_NAME,
+		USER_NO,
+		wx_openid,
+		REMARK,
+		STATUS,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME,
+		LAST_UPDATE_TIME,
+		LAST_UPDATE_USER_ID,
+		LAST_UPDATE_USER_NAME,
+		LAST_UPDATE_TEAM_ID,
+		LAST_UPDATE_TEAM_NAME,
+		LAST_UPDATE_DEPART_ID,
+		LAST_UPDATE_DEPART_NAME,
+		LAST_UPDATE_UNIT_ID,
+		LAST_UPDATE_UNIT_NAME,
+		postion,
+		depart_power,authority_id,authority_name
+		FROM
+		sys_user_info where 1=1
+		and authority_id=#{postion}
+		and unit_id=#{unitId}
+	</select>
+	<select id="queryByIdForMysql" parameterType="com.sd.farmework.pojo.SysUserInfo" resultMap="SysUserInfoMapForMysql">
+		select * from sys_user_info where user_id=#{userId}
+	</select>
+	<!-- 查找对应的审批流是否有相应用户 -->
+	<select id="queryUserForAppr" parameterType="com.sd.farmework.pojo.SysUserInfo" resultMap="SysUserInfoMapForMysql">
+		select * from sys_user_info
+		where authority_id=#{authorityId}
+		and DEPART_ID=#{departId}
+	</select>
+</mapper> 
+

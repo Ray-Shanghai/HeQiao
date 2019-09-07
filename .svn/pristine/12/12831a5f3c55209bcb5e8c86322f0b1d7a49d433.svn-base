@@ -1,0 +1,104 @@
+<html ng-app="ionicApp">
+<head>
+<title>意见</title>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no,width=device-width,height=device-height">
+<script src="js/jquery.min.js"></script>
+<script src="js/public.js"></script>
+<script src="js/ionic.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/ionic.css">  
+<script type="text/javascript" src="../../wxpage/heqiao/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../wxpage/heqiao/js/approven.js"></script>
+    <script type="text/javascript" src="../../resources/js/base.js"></script>
+  <style type="text/css">
+  	div{
+  		width: 90%;
+  		margin:0px auto;
+  	}
+  	textarea{
+  		width: 100%;
+  		max-width: 100%;
+  		height: 300px;
+  		max-height: 50%;
+  		margin:10px auto;
+  		border: 1px solid black;
+  	}
+  </style>
+   <script type="text/javascript">
+    angular.module('ionicApp', ['ionic'])
+
+    .controller('SlideController', function($scope) {
+      
+      $scope.myActiveSlide = 0;
+      
+    });
+	
+	
+    </script>
+  <script type="text/javascript">
+  $(function(){
+	  var isDetail=window.location.search.split("&")[2].split(",")[1].split("*")[1];
+	  var noteType=window.location.search.split("&")[2].split(",")[1].split("*")[0];
+	  $("#send").click(function(){
+		  doApproven(this,3,isDetail,noteType);
+	  })
+  });
+ /*  function doApproven(obj){
+		var taskId=window.location.search.split("&")[1].split("=")[1];
+		var noteId=window.location.search.split("&")[2].split(",")[0];
+		var note_type=window.location.search.split("&")[2].split(",")[1];
+		if(confirm("你真的要退回吗？")){
+			var data  = {
+					auditStatus:'3',
+					approvenResult:2,
+					taskId:taskId,
+					noteId:noteId,
+					approvenRemark:$("textarea[name=approvenRemark]").val(),
+					noteType:note_type
+			}
+			$.ajax({  
+	      		type : 'POST',  
+	       		url : wxBase.serverContet+'/manager/loginIn/currencyNote/saveApproven.do',
+	       		data: data,
+	       		async : false,  
+	      		success : function(data) {  
+	        	  	if(data.code=="000"){
+	        		     alert("审批成功");
+	            	     window.location.href=wxBase.serverContet+"/wxpage/heqiao/index.html";
+	               	  }else{
+	            	     alert(data.msg);
+	               	  }
+	      		   },error : function() {}  
+	  		}); 
+		}
+	} */
+  </script>
+</head>
+<body >
+<!--内容-->
+ <ion-view title="Home" hide-nav-bar="true">
+  <ion-scroll  direction="y" scrollbar-y="false" style="width: 90%; height: 93%;margin: 0px auto;">
+<div>
+ 
+	<div class="list list-borderless detailLogo" >
+		<div class="item item-positive">
+		<img src="img/logo2-01.png" class="logoImg">
+		</div>
+	</div>
+	<div>
+		请输入意见：
+		<textarea name="approvenRemark">
+			
+		</textarea>
+		<div>
+		<div class="div-button">
+			<button id="send" class="button button-block button-positive font">确定</button>
+		</div>
+ 		<div class="div-button"  >
+			<button id="exit" style="margin-left: 1rem;" class="button button-block button-positive font" onclick="javascript:history.go(-1)">取消</button>
+		</div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

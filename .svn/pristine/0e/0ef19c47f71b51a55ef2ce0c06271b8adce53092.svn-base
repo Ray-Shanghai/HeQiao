@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户信息</title>
+
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/icon.css">
+ 	
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../../resources/loginIn/sysManage/sysUserInfo.js"></script>
+ 
+ 	<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+
+</head>
+<body>
+ 	<div class="easyui-layout"  fit="true">
+ 		<div style="margin:10px 0">
+		<input type="checkbox" onchange="$('#sysdepartInfoId').tree({onlyLeafCheck:$(this).is(':checked')})">
+		</div>
+  		<div data-options="region:'west',split:true" style="width:350px;">
+  			<ul id="sysdepartInfoId" class="easyui-tree" data-options="url:'../../../manager/loginIn/SysDepartInfo/queryList.do?state=closed1',method:'get',animate:true,checkbox:false"></ul>
+  		</div>
+		<div data-options="region:'center',iconCls:'icon-ok'"  >
+		<form id="J_Form"  class="form-horizontal" >
+      		<input type="hidden"    name="unitId"    id="unitId">
+			<input type="hidden"    name="unitName"   id="unitName">
+			
+			<input type="hidden"    name="departId"  id="departId">
+			<input type="hidden"    name="departName" id="departName">
+			
+			<input type="hidden"    name="teamId" id="teamId">
+			<input type="hidden"    name="teamName" id="teamName">
+			
+			<input type="hidden" name="departPower"  id="departPower">
+
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>姓名：</label>
+            <div class="controls">
+              <input  type="text" name="userName"  data-rules="{required:true}" class="input-normal control-text">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>所属部门：</label>
+            <div class="controls" id="depart">
+             </div>
+             
+          </div>
+          </div>
+         <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>职称：</label>
+            <div class="controls">
+              <input  type="text" name="postion"  data-rules="{required:true}" class="input-normal control-text">
+            </div>
+            </div>
+          </div>
+          <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>职位：</label>
+            <div class="controls" id="depart2">
+             <select id="postion"  name="authorityId"  data-rules="{required:true}" class="input-normal control-text">
+              		<option value="">请选择</option>
+              </select>
+              <input id="authorityName" type="hidden" name="authorityName">
+             </div>
+             
+          </div>
+            
+        </div>
+         <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>登录名：</label>
+            <div class="controls">
+              <input  type="text" name="loginName"  data-rules="{required:true}" class="input-normal control-text">
+            </div>
+          </div>
+        </div>
+         <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>密码：</label>
+            <div class="controls">
+              <input  type="password" name="loginPwd"  data-rules="{required:true}" class="input-normal control-text">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>状态：</label>
+            <div class="controls">
+            <label for="statusY">正常</label>
+              <input id="statusY" type="radio" value="Y" name="status" checked="checked" data-rules="{required:true}" >
+             <label for="statusN">禁用</label>
+              <input id="statusN"  type="radio" value="N" name="status"  data-rules="{required:true}" >
+              
+            </div>
+          </div>
+        </div>
+         <div class="row" style="display:none">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>部门权限：</label>
+            <div class="controls" style="height:100%">
+             <div data-options="split:true" style="width:200px;">
+  				<ul id="sysdepartInfoIdPower" class="easyui-tree" data-options="url:'../../../manager/loginIn/SysDepartInfo/queryList.do?state=closed1',method:'get',animate:true,checkbox:true"></ul>
+  			</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row form-actions actions-bar">
+            <div class="span8 offset3 ">
+              <button type="submit" class="button button-primary" >保存</button>
+              <button type="reset" class="button">重置</button>
+            </div>
+        </div>
+      </form>
+	</div>
+ </div>
+</body>
+</html>
+ <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+ <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+<script type="text/javascript" >
+
+BUI.use('bui/form',function (Form) {
+    var f1 = new Form.Form({
+    srcNode : '#J_Form'
+  	}).render();
+
+		$("#J_Form").submit(function() {  
+			var nodes = $('#sysdepartInfoIdPower').tree('getChecked');
+			if(nodes!=null&&nodes!=""){
+   	  		var s = '';
+  	  		for(var i=0; i<nodes.length; i++){
+  	  			var nodeId=nodes[i].id;
+  	  			var isVirtual =nodes[i].isVirtual;
+  	 			if(nodeId!=""){
+  	 					s += nodeId+",";
+  	 			}
+  	  		}
+  	  		$("#departPower").val(","+s);
+			}
+  		if(f1.isValid()&&($("#depart").text().trim()!=""&&$("#depart").text().trim()!=null)){
+  			
+      		$.ajax({  
+          		type : 'POST',  
+           		url : base.serverContet+'/manager/loginIn/SysUserInfo/add.do',  
+         		data: $('#J_Form').serialize(),  
+          		async : false,  
+          		success : function(data) {  
+            	  	if(data.code=="000"){
+            		  BUI.Message.Alert('信息保存成功',function(){
+            			  top.topManager.reloadPage("001001002")
+            			  top.topManager.closePage();
+            	        },'info');
+            		//让信息框按钮获取焦点
+            		    $(".bui-stdmod-footer button").focus();
+                   	  }else{
+                   		base.alertTip(data);
+                   	  }
+          		   },error : function() {}  
+      		});  
+      		return false;
+ 		}else{
+ 			BUI.Message.Alert('请确保必填项全部填写完成。',function(){
+	        },'info');
+ 			//让信息框按钮获取焦点
+ 		    $(".bui-stdmod-footer button").focus();
+ 			return false;
+ 		}
+	});
+	return false;
+} );
+
+$(function(){
+	$.ajax({
+		url:base.serverContet+'/manager/loginIn/sysAuthority/authorityDataList.do',
+		type:'post',
+		dataType:'json',
+		async : false,
+		success: function (result){
+			//alert(JSON.stringify(result));
+			for(var i=0;i<result.length;i++){
+				$("#postion").append(new Option(result[i].authorityName,result[i].authorityId));
+			}
+		}
+	})
+	
+
+		$("#postion").change(function(){
+			$("#authorityName").val($(this).children('option:selected').text());
+		});
+			 
+});
+</script>

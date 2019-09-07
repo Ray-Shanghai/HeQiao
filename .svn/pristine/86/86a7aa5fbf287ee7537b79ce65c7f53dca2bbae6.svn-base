@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sd.farmework.mapper.HqApprovenRuleMapper">
+
+	<resultMap type="com.sd.farmework.pojo.HqApprovenRule" id="HqApprovenRuleMapForMysql">
+
+		<result column="approven_rule_id" property="approvenRuleId" />
+		<result column="apply_position_id" property="applyPositionId" />
+		<result column="apply_position_no" property="applyPositionNo" />
+		<result column="apply_position_name" property="applyPositionName" />
+		<result column="approven_position_id" property="approvenPositionId" />
+		<result column="approven_position_no" property="approvenPositionNo" />
+		<result column="approven_position_name" property="approvenPositionName" />
+		<result column="approven_type_id" property="approvenTypeId" />
+		<result column="approven_type_name" property="approvenTypeName" />
+		<result column="approven_unit_id" property="approvenUnitId" />
+		<result column="approven_exp" property="approvenExp"/>
+
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="STATUS" property="status" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+	</resultMap>
+	
+	<!-- 添加审批规则 -->
+	<insert id="addBatchForMysql" parameterType="java.util.List">
+	insert into hq_approven_rule
+	(
+	apply_position_id,
+	apply_position_no,
+	apply_position_name,
+	approven_position_id,
+	approven_position_no,
+	approven_position_name,
+	approven_type_id,
+	approven_type_name,
+	approven_unit_id,
+	approven_exp,
+	
+	create_user_id,
+	create_user_name,
+	create_depart_id,
+	create_depart_name,
+	create_unit_id,
+	create_unit_name,
+	create_time
+
+	)
+	values
+	<foreach collection="list" separator="," item="approvenRlue">
+	(
+	#{approvenRlue.applyPositionId},
+	#{approvenRlue.applyPositionNo},
+	#{approvenRlue.applyPositionName},
+	#{approvenRlue.approvenPositionId},
+	#{approvenRlue.approvenPositionNo},
+	#{approvenRlue.approvenPositionName},
+	#{approvenRlue.approvenTypeId},
+	#{approvenRlue.approvenTypeName},
+	#{approvenRlue.approvenUnitId},
+	#{approvenRlue.approvenExp},
+	
+	#{approvenRlue.createUserId},
+	#{approvenRlue.createUserName},
+	#{approvenRlue.createDepartId},
+	#{approvenRlue.createDepartName},
+	#{approvenRlue.createUnitId},
+	#{approvenRlue.createUnitName},
+	sysdate()
+	
+	)
+	</foreach>
+	</insert>
+
+	<select id="queryListForMysql" resultMap="HqApprovenRuleMapForMysql" parameterType="com.sd.farmework.pojo.HqApprovenRule">
+		SELECT * FROM 
+		hq_approven_rule t
+		WHERE t.approven_type_id=#{approvenTypeId} AND t.approven_unit_id=#{approvenUnitId}
+	</select>
+	
+	<delete id="deleteForMysql" parameterType="com.sd.farmework.pojo.HqApprovenRule">
+		delete from hq_approven_rule  where  approven_type_id=#{approvenTypeId} and approven_unit_id=#{approvenUnitId}
+	</delete>
+	<!-- 查找符合条件的审批流 -->
+	<select id="queryForMysql" parameterType="com.sd.farmework.pojo.HqApprovenRule" resultMap="HqApprovenRuleMapForMysql">
+		select t.* from hq_approven_rule t 
+		where t.approven_exp &lt;=cast(#{approvenExp} as  DECIMAL(10,2)) 
+		and t.approven_type_id=#{approvenTypeId}
+		and t.apply_position_no=#{applyPositionNo}
+		and t.approven_unit_id=#{approvenUnitId}
+		order by  t.approven_position_no
+	</select>
+	<!-- 获取符合审批规则的审批表达式 -->
+	<select id="queryExpForMysql" parameterType="com.sd.farmework.pojo.HqApprovenRule" resultType="java.lang.String">
+		select min(cast(t.approven_exp as  DECIMAL(10,2) )) from hq_approven_rule t 
+		where t.approven_exp &gt;=cast(#{approvenExp} as   DECIMAL(10,2) )
+		and t.approven_type_id=#{approvenTypeId}
+		and t.approven_unit_id=#{approvenUnitId}
+		and t.apply_position_no=#{applyPositionNo}
+	</select>
+	
+	<!-- 查出当前部门是否有对应类型的审批流 -->
+	<select id="queryMaxExp" parameterType="com.sd.farmework.pojo.HqApprovenRule" resultType="java.lang.Integer">
+		SELECT MAX(cast(t.approven_exp as UNSIGNED INTEGER)) FROM hq_approven_rule t WHERE t.approven_type_id =#{approvenTypeId}
+		AND t.approven_unit_id=#{approvenUnitId} and t.apply_position_no=#{applyPositionNo}
+	</select>
+	<!--查询符合部门，发起人职位，审批类型的所有审批流  -->
+	<select id="queryApprovenList" parameterType="com.sd.farmework.pojo.HqApprovenRule" resultMap="HqApprovenRuleMapForMysql">
+		select t.* from hq_approven_rule t 
+		where  t.approven_type_id=#{approvenTypeId}
+		and t.apply_position_no=#{applyPositionNo}
+		and t.approven_unit_id=#{approvenUnitId}
+		order by  t.approven_position_no
+	</select>
+</mapper> 
+

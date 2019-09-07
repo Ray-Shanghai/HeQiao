@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户信息</title>
+
+ 
+  
+ 	<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+
+</head>
+<body>
+  
+  	
+  <div class="container">
+    <form id ="J_Form" class="form-horizontal">
+    <input id="companySealId" name="companySealId" type="hidden">
+     
+      <div class="row">
+        <div class="control-group span12">
+          <label class="control-label"><s>*</s>用章名称：</label>
+          <div class="controls">
+            <input name="companySealName" id="companySealName" type="text" class="control-text" data-rules="{required:true}">
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="control-group span12">
+          <label class="control-label"><s>*</s>状态：</label>
+          <div class="controls">
+            <select name="status" id="status" class="bui-form-field-select bui-form-field" >
+              <option value="Y">正常</option>
+              <option value="N">禁用</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="row">
+        <div class="control-group span12">
+          <label class="control-label"><s>*</s>备注：</label>
+          <div class="controls">
+           <textarea name="companySealDesc" id="companySealDesc" class="span8 span-width bui-form-field" aria-disabled="false" aria-pressed="false"></textarea>
+          </div>
+        </div>
+        
+      </div>
+        <br>
+       <br>
+       <br>	
+      <hr/>
+     
+      
+      <div class="row">
+        <div class="form-actions offset3">
+          <button type="submit" class="button button-primary">保存</button>
+          <button type="reset" class="button">重置</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script type="text/javascript" src="../../assets/js/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+  <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+  <script type="text/javascript">
+    BUI.use('common/page');
+  </script>
+  
+<script type="text/javascript">
+  BUI.use(['bui/grid','bui/data','bui/form'],function (Grid,Data,Form) {
+
+    
+	   $("#companySealId").val(window.location.search.split("?")[1].split("=")[1].split("&")[0].split("&")[0]);
+	    $("#companySealName").val(unescape(window.location.search.split("?")[1].split("=")[2].split("&")[0]));
+	    $("#companySealDesc").text(unescape(window.location.search.split("?")[1].split("=")[3].split("&")[0]));
+	   var  status = window.location.search.split("?")[1].split("=")[4].split("&")[0];
+
+	   var select = document.getElementById("status");  
+	 
+	   for(var i=0; i<select.options.length; i++){  
+	       if(select.options[i].value == status){  
+	           select.options[i].selected = true;  
+	           break;  
+	       }  
+	   }  
+	   
+    var form = new Form.HForm({
+      srcNode : '#J_Form'
+    });
+    form.render();
+
+    form.on('beforesubmit',function(){
+       
+    	if(!form.isValid()){
+    		return false;
+    	}
+    	  
+    	  $.ajax({  
+       		type : 'POST',  
+        		url : base.serverContet+'/manager/loginIn/companySealInfo/update.do',  
+	      		data:  $('#J_Form').serialize(),  
+	       		async : false,  
+	       		success : function(data) {  
+	         	  	if(data.code=="000"){
+	         		  BUI.Message.Alert('信息保存成功',function(){
+	         			 top.topManager.reloadPage("001002001")
+           			 	 top.topManager.closePage();
+	         	        },'info');
+	         		//让信息框按钮获取焦点
+            		    $(".bui-stdmod-footer button").focus();
+	                	  }else{
+	             	   BUI.Message.Alert('信息保存失败，系统繁忙',function(){
+	         	        },'info');
+	                	  }
+	         		 //让信息框按钮获取焦点
+          		    $(".bui-stdmod-footer button").focus();
+	       		   },error : function() {}  
+	   		});
+    	  return false;
+       
+    });
+
+
+  });
+</script>
+
+<body>
+</html> 

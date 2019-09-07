@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes"/> 
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成旅集团内部审批管理系统登录</title>
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/css/normalize.css">
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/css/app.css" />
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/fonts/iconfont.css" />
+		<script src="/HeQiao/resources/js/base.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/rem.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/heqiao/js/jquery.min.js"></script>
+		<script type="text/javascript">
+		 function addData() {
+				$.ajax({  
+		      		type : 'POST',  
+		       		url : base.serverContet+'/manager/loginIn/SysUserInfo/query.do',  
+		     		data: $('#J_Form').serialize(),  
+		      		async : false,  
+		      		success : function(data) {  
+		        	  	if(data.code=="LOGIN_0000"){
+		        		    alert("登录成功");
+		        		    window.location.href="index.html";
+		               	  }else{
+		            	    alert(data.msg);
+		            	    return false;
+		               	  }
+		      		   },error : function() {}  
+		  		}); 
+				}
+		</script>
+	</head>
+	<body class="bgcolor-blue">
+		<div class="logo"><img src="image/logo2-01.png"/></div>
+		<div class="login-from">
+			<form id="J_Form">
+				<div class="input-a"><input type="text" name="loginName" placeholder="请输入员工编码"></div>
+				<div class="input-a"><input type="password" name="loginPwd" placeholder="输入密码"/></div>
+				<div class="button-login"><button type="button" onclick="addData()">登录系统</button></div>
+			</form>
+		</div>
+	</body>
+</html>

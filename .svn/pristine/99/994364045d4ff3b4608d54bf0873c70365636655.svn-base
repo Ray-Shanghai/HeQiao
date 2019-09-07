@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>审批功能列表</title>
+    	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/icon.css">
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../../resources/js/base.js"></script>
+  	<script src="../../../resources/js/base.js"></script>
+</head>
+<body>
+	 <div id="tb" style="position: absolute;top: 4px;left: 146px;z-index: 99999;">  
+        <span style="font-size: 14px;">业务类型:</span>  
+        <select id="zcTypeName" onchange="doSearch()" style="line-height: 23px; border: 1px solid #ccc;width: 100px;height: 23px;">
+        	<option value="">请选择</option>
+        	<option value="3">通用</option>
+			<option value="2">请假</option> 
+        	<option value="1">支出</option> 
+        </select> 
+    </div> 
+	<table id="list_data" cellspacing="0" cellpadding="0"> 
+    <thead> 
+        <tr>  
+          	<th data-options="field:'zcId',width:100" >业务类型编号</th>
+        	<th data-options="field:'zcTypeName',width:200" >业务类型名称</th>
+	    </tr> 
+    </thead> 
+</table>  
+ 
+</body>
+</html>
+<script type="text/javascript">
+$(function(){
+		$('#list_data').datagrid({ 
+        iconCls:'icon-edit',//图标 
+        width: 800, 
+        //height: '60', 
+        nowrap: false, 
+        striped: true, 
+        border: true, 
+        collapsible:false,//是否可折叠的 
+        fit: true,//自动大小 
+        url:base.serverContet+'/manager/loginIn/HqApprovenRules/HqApprovenDataList.do', 
+        //sortName: 'code', 
+        //sortOrder: 'desc',
+        remoteSort:false,  
+        idField:'controllerMethodId', 
+        singleSelect:true,//是否单选 
+        pagination:false,//分页控件 
+        rownumbers:true,//行号 
+        toolbar: [{ 
+            text: '添加', 
+            iconCls: 'icon-add', 
+            handler: function() { 
+            	top.topManager.openPage({
+            	    id : "addApprovenFunction",
+            	    href : base.serverContet+'/page/sysManage/approven/addApprovenFunction.html',
+            	    title : "添加审批功能"
+        		});
+             } 
+        },{ 
+            text: '删除', 
+            iconCls: 'icon-remove', 
+            handler: function() { 
+            	var row = $('#list_data').datagrid('getSelected');
+             	if(row==null||row==""){
+            		alert('请选择一行数据');
+            		return;
+            	}
+             	if(row.zcId=='301'){
+             		alert('无权限删除该数据！');
+             		return;
+             	}
+	            if(confirm("您确定要删除此订单吗")){
+		 		 			$.ajax({
+		 					url: base.serverContet+'/manager/loginIn/SysZhiChuType/deleteRuel.do',
+		 					type:"post",
+		 					async:false,
+		 					data:{zcId:row.zcId},
+		 					success:function(data){
+		 					if(data.code=="000"){
+			         		   		alert("数据删除成功");
+			         		   		top.topManager.reloadPage("001001005");
+	 		                	  }else{
+			             	  		 alert(data.msg);
+			                	  }
+		 					},error:function(){}
+		 				});
+		 		 }
+             	
+            } 
+        }],
+        onClickRow: function(index, data) {
+        	var row = $('#list_data').datagrid('getSelected');
+        	window.parent.document.getElementById('centerIframe').src=base.serverContet+'/page/sysManage/approven/approvenRuleList.html?zcId='+row.zcId+"&zcTypeName="+escape(row.zcTypeName);
+        }
+    });
+	
+});
+function doSearch(){  
+    $('#list_data').datagrid('load', {  
+        test: "search",  
+        zcTypeName: $('#zcTypeName').val()  
+    });
+	window.parent.document.getElementById('centerIframe').src="";
+	$('#list_data').datagrid('clearSelections');   
+ }  	
+	</script>
+   

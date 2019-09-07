@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户信息</title>
+
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/icon.css">
+ 	
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+ 	<script type="text/javascript" src="../../../resources/js/base.js"></script>
+  
+ 	<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+<style type="text/css">
+.w66{
+	width:66px;
+}
+.row{
+	padding: 10px;
+}
+</style>
+</head>
+<body>
+ 	<div class="easyui-layout"  fit="true">
+		<div data-options="region:'center',iconCls:'icon-ok'"  >
+		<form id="J_Form"  class="form-horizontal" >
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>业务类型：</label>
+            <select name="zcId" data-rules="{required:true}">
+            	<option value="1">支出</option>
+            	<option value="2">请假</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>业务类型名称：</label>
+            <input type="text" name="zcTypeName"  data-rules="{required:true}" >
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>状态：</label>
+            <div class="controls">
+            <label for="statusY">正常</label>
+              <input id="statusY" type="radio" value="Y" name="status" checked="checked" data-rules="{required:true}" >
+             <label for="statusN">禁用</label>
+              <input id="statusN"  type="radio" value="N" name="status"  data-rules="{required:true}" >
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="control-group span15">
+            <label class="control-label">备注：</label>
+            <div class="controls control-row4">
+              <textarea name="remark" class="input-large"  data-rules="{required:true}"></textarea>
+            </div>
+          </div>
+        </div> -->
+        <div class="row form-actions actions-bar">
+            <div class="span8 offset3 ">
+              <button type="submit" class="button button-primary" >保存</button>
+              <button type="reset" class="button">重置</button>
+            </div>
+        </div>
+      </form>
+	</div>
+</div>
+ 
+</body>
+</html>
+ <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+ <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+<script type="text/javascript" >
+	BUI.use('bui/form',function (Form) {
+	    var f1 = new Form.Form({
+	    srcNode : '#J_Form'
+	  	}).render();
+
+		$("#J_Form").submit(function() {  
+  		if(f1.isValid()){
+      		$.ajax({  
+          		type : 'POST',  
+           		url : base.serverContet+'/manager/loginIn/SysZhiChuType/add.do',  
+         		data: $('#J_Form').serialize(),  
+          		async : false,  
+          		success : function(data) {  
+            	  	if(data.code=="000"){
+            		  BUI.Message.Alert('信息保存成功',function(){
+            			  top.topManager.reloadPage("001001005")
+            			  top.topManager.closePage();
+            	        },'info');
+            		  //让信息框按钮获取焦点
+            		    $(".bui-stdmod-footer button").focus();
+                   	  }else{
+                	   BUI.Message.Alert('信息保存失败，系统繁忙',function(){
+            	        },'info');
+                	   //让信息框按钮获取焦点
+             		    $(".bui-stdmod-footer button").focus();
+                   	  }
+          		   },error : function() {}  
+      		}); 
+      		return false;
+ 		}else{
+ 			BUI.Message.Alert('请确保必填项全部填写完成。',function(){
+	        },'info');
+ 			//让信息框按钮获取焦点
+  		    $(".bui-stdmod-footer button").focus();
+ 			return false;
+ 		}
+	});
+	return false;
+} );
+
+</script>

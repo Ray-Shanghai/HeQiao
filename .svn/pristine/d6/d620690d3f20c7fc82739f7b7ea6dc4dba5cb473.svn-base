@@ -1,0 +1,37 @@
+<html><head>
+    <title>glDatePicker 演示程序</title>
+  <link href="res/styles/glDatePicker.default.css" rel="stylesheet" type="text/css">
+	<script id="jquery_183" type="text/javascript" class="library" src="res/jquery-1.8.1.min.js"></script>
+	<script src="res/glDatePicker.min.js">
+	</script>
+	</head>
+	<body>
+		<h1>
+			glDatePicker 演示程序
+		</h1>
+    <input type="text" id="example"   gldp-id="gldp-7822652521" class="gldp-el">
+	
+	
+
+    	<style>body {background:#fff;}
+input {width:250px;}</style>
+	    		<script>$(window).load(function() {
+	$('#example').glDatePicker({
+		showAlways : true,
+		format : 'yyyy-mm-dd'
+	});
+});
+
+var tValue="";
+setInterval(function(event){
+       if(tValue !=document.getElementById("example").value){
+
+         //这里写自己的业务逻辑代码
+         tValue =document.getElementById("example").value;
+alert(tValue);
+       }
+  },100);
+
+</script>
+
+</body></html>

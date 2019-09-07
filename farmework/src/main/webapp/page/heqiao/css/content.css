@@ -1,0 +1,346 @@
+body{background: #fff;}
+.container{
+	width: 100%;
+    overflow: hidden;
+    background: #FFFFFF;
+}
+.public-nav{
+	height: 28px;
+	line-height: 28px;
+	border-bottom: 1px solid #ddd;
+    padding-left: 8px;
+}
+.public-nav a{
+	display: inline-block;
+	margin-left: 15px;
+	margin-right: 15px;
+	position: relative;
+}
+.public-content{
+	margin-top: 15px;
+}
+.public-content .public-content-header{
+	height: 28px;
+	line-height: 28px;
+	font-weight: 600;
+	padding-left: 10px;
+	border-bottom: 1px solid #dedede;
+}
+.public-content .public-content-cont{
+	padding:15px;
+	position: relative;
+}
+/*表单相关 config*/
+.form-group{
+	width: 100%;
+    margin-top: 10px;
+    clear: both;
+}
+.mt0{
+	margin-top: 0;
+}
+.form-group label{
+	width: 80px;
+	font-size: 14px;
+	display: inline-block;
+	float: left;
+	height: 32px;
+	line-height: 32px;
+}
+.form-group .form-input-txt{
+	width:30%;
+	height: 32px;
+ 	padding-left: 10px;
+	outline: none;
+	border: 1px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+.form-group .form-input-small{
+	width:160px;
+	height: 20px;
+	line-height: 20px;
+	border-radius: 8px;
+	border:1px solid #ccc;
+	padding-left: 5px;
+	outline: none;
+}
+.form-group .form-select{
+	border: 1px solid #ddd;
+	height:28px;
+	padding:5px;
+	width:120px;
+}
+.form-group input:focus{
+	box-shadow: 1px 1px 1px 0px #ccc;;
+	-webkit-box-shadow: 1px 1px 1px 0px #ccc;;
+	-moz-box-shadow: 1px 1px 1px 0px #ccc;;
+	-o-box-shadow: 1px 1px 1px 0px #ccc;;
+}
+
+.form-group .file {
+    position: relative;
+    top: 10px;
+    display: inline-block;
+    background: #6bc095;
+    border: 1px solid #6bc095;
+    border-radius: 4px;
+    padding: 4px;
+    overflow: hidden;
+    color: #fff;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.form-group .file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.form-group .file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+.form-group a{
+	display: inline-block;
+	margin-left: 15px;
+}
+.form-group .form-item{
+	
+}
+.form-group .form-item li{
+	width:130px;
+	overflow: hidden;
+	float: left;
+}
+.form-group .form-item li input{
+	width:60px;
+	height:28px;
+	line-height: 28px;
+	border-radius: 1px;
+	border:1px solid #ccc;
+	outline: none;
+	padding-left: 8px;
+	margin-right: 2px;
+}
+.form-group .form-input-textara{
+	width:580px;
+	height: 100px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	padding:10px;
+	outline: none;
+}
+.sub-btn{
+	background: #6CB98F;
+    color: #FFFFFF;
+    padding: 0 15px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+}
+.public-content .public-content-cont .public-cont-table{
+	width:100%;
+}
+.public-content .two-col .public-cont-table{
+	width:71%;
+	font-size: 12px;
+	line-height: 38px;
+}
+.public-content .public-content-cont tr{
+	height: 45px;
+	text-align: center;
+	border: 1px solid #ccc;
+}
+.public-content .public-content-cont th{
+	background: #C9EAF7;
+	padding: 5px;
+	text-align:center;
+}
+.public-content .public-content-cont td{
+	height:38px;
+	border-right: 1px solid #ccc;
+}
+.public-content .public-content-cont .table-fun a{
+	display: inline-block;
+	width:40px;
+	height: 24px;
+	line-height: 24px;
+	padding: 3px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+.public-content .public-content-cont .thumb{
+	width: 150px;
+	height: 50px;
+	margin:10px;
+}
+.public-content .page{
+	text-align: center;
+	height: 34px;
+	line-height: 34px;
+	margin-top: 10px;
+}
+.public-content .page a{
+	display: inline-block;
+}
+.public-content .page .page-input{
+	width:40px;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 5px;
+	border-radius: 5px;
+	border:1px solid #ccc;
+	outline: none;
+}
+.public-content .page .page-btn{
+	width:40px;
+	height: 28px;
+	line-height: 20px;
+	padding-left: 5px;
+	border-radius: 5px;
+	border: none;
+	color:#fff;
+	background: #6CB98F;
+}
+.public-content .public-cont-left{
+	width:260px;
+	border:1px solid #ccc;
+	padding: 5px;
+	float: left;
+	margin-right: 10px;
+}
+.public-content .two-col .col-1{
+	width:170px;
+}
+.public-content .two-col .col-2{
+	width:100%;
+}
+.public-content .public-cont-left .public-cont-title{
+	height: 28px;
+	line-height: 28px;
+	border-bottom: 1px dashed #ccc;
+}
+.public-content .public-cate-list{
+	padding: 5px;
+}
+.public-content .public-cate-list .public-cate-item{
+	height:24px;
+	line-height: 24px;
+}
+.public-content .public-cate-list .public-cate-item a:hover{
+	color:#6CB98F;
+}
+.state-img{
+	width: 30px;
+}
+.border_input{
+	line-height: 22px;border: 0px;border-bottom: 1px solid #ccc;width: 350px;	margin-left: 15px;
+}
+.table_td_left{
+	width:10%
+}
+.table_td_right{
+ width:90%;
+ text-align:left;
+}
+.pd_left_10{
+	padding-left: 10px;
+}
+.subBtn input{
+	width: 90px;
+	height:26px;
+	line-height:26px;
+    background-color: #c1f0ff;
+    color:#0098c5;
+    border-color: #d9f1f2;
+    margin:0 10px;
+    border:1px solid #ccc;
+    cursor:pointer;
+    border-radius:2px;
+}
+.public-cont-table .title-company{
+	color:#0098c5;
+}
+.warnBtn{
+	    display: -webkit-inline-box;
+}
+.warnBtn input{
+	width: 50px;
+    background-color: #f5ecd3;
+    border: 1px solid;
+    color: #944721;
+ }
+.catchImage{
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	position: absolute;
+}
+ 
+/*a  upload */
+.a-upload {
+       height: 19px;
+    line-height: 19px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #d9f1f2;
+     overflow: hidden;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+}
+
+.a-upload:hover {
+       text-decoration: none
+}
+/* 弹框 */
+.showBox{
+		position: fixed;
+		top: 10%;
+		left: 30%;
+		display: none;
+		width: 30%;
+		height:50%;
+		background-color: #fff;
+		border:1px solid #ccc;
+		border-radius:4px;
+		padding: 5px auto;
+		overflow: auto;
+	}
+	.showBox table{
+		width: 100%;
+		margin: 0px auto;
+	}
+	.showBox table td,th{
+		    padding: 10px 0 5px 10px;
+	}
+	.remove td:first-child{text-align:center;width:58px;}
+	.checkBox,.radio{
+		width: 20px;
+		height: 20px;
+		vertical-align: middle;
+	}
+	.showBox .close{
+		float: right;
+	}
+	.th{
+		text-align: center;background-color: #C9EAF7;color: #0098c5;font-size: 16px;font-weight: bold;
+	}
+/* 弹框 */

@@ -1,0 +1,159 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>角色设置</title>
+	
+		<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/gray/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/icon.css">
+	 	
+		<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+	
+		<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+	    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+	    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+	
+	</head>
+	<body>
+		<div class="easyui-layout"  fit="true">
+	  		<div data-options="region:'west',split:true"style="width:200px;">
+	   			<ul id="sysdepartInfoId" class="easyui-tree" ></ul>
+	  		</div>
+			<div data-options="region:'center',iconCls:'icon-ok'"  >
+				 <form id="J_Form"  class="form-horizontal" >
+				     <input type="hidden" name="parentDepartId" id="parentDepartId">
+				     <input type="hidden" name="functionIds"  id="functionIds">
+				     <input type="hidden" name="unitId"  id="unitId">
+				     <input type="hidden" name="unitName"  id="unitName">
+				     <input type="hidden" name="opear"  id="opear" >
+				     <input type="hidden" name="roleIdP" id="roleIdP">
+				     <input type="hidden"  id="functionOperateIds" name="functionOperateIds">
+				     <input type="hidden"  id="functionType" name="functionType" >
+				     <div class="row">
+				          <div class="control-group span20">
+				            <label class="control-label"><s>*</s>单位名称：</label>
+				            <div class="controls" id="unitNameDiv">
+				             </div>
+				          </div>
+				      </div>
+				      <div class="row">
+				          <div class="control-group span20">
+				            <label class="control-label"><s>*</s>角色名称：</label>
+				            <div class="controls"  >
+				                 <input  type="text" name="roleName"  data-rules="{required:true}" class="input-normal control-text">
+				             </div>
+				          </div>
+				        </div>
+				        <div class="row">
+				          <div class="control-group span20">
+				            <label class="control-label"><s>*</s>状态：</label>
+				            <div class="controls">
+				            <label for="statusY">正常</label>
+				              <input id="statusY" type="radio" value="Y" name="status" checked="checked" data-rules="{required:true}" >
+				             <label for="statusN">禁用</label>
+				              <input id="statusN"  type="radio" value="N" name="status"  data-rules="{required:true}" >
+				              
+				            </div>
+				          </div>
+				        </div>
+				        <div class="row">
+				          <div class="control-group span15">
+				            <label class="control-label">备注：</label>
+				            <div class="controls control-row4">
+				              <textarea name="roleDesc"  class="input-large"  data-rules="{required:true}"  type="text"></textarea>
+				            </div>
+				          </div>
+				        </div>
+				        <div class="row form-actions actions-bar">
+				            <div class="span8 offset3 ">
+				              <button type="submit" class="button button-primary" >保存</button>
+				              <button type="reset" class="button">重置</button>
+				            </div>
+				        </div>
+      			</form>
+			</div>
+		</div>
+	</body>
+	</html>
+  <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+  <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+  <script type="text/javascript">
+    BUI.use('common/page');
+  </script>
+	<script type="text/javascript">
+	$(document).ready(function() { 
+	 
+		   $("#parentDepartId").val(window.location.search.split("?")[1].split("=")[1].split("&")[0].split("&")[0]);
+		   $("#unitName").val(unescape(window.location.search.split("?")[1].split("=")[2].split("&")[0]));
+		   $("#unitId").val(unescape(window.location.search.split("?")[1].split("=")[3].split("&")[0]));
+		   $("#opear").val(unescape(window.location.search.split("?")[1].split("=")[4].split("&")[0]));
+		   $("#unitNameDiv").text(unescape(window.location.search.split("?")[1].split("=")[2].split("&")[0]));
+		   $('#sysdepartInfoId').tree({
+				url:'../../../manager/loginIn/SysFunctionInfo/queryList.do?functionType=&type=1',
+			    method:'get',
+			    animate:true,
+			    checkbox:true
+			});
+	});
+ 
+  BUI.use('bui/form',function (Form) {
+       var f1 = new Form.Form({
+        srcNode : '#J_Form'
+      }).render();
+        
+  	  $("#J_Form").submit(function() {  
+  		  
+  		var nodes = $('#sysdepartInfoId').tree('getChecked');
+  		var s = '';
+  		for(var i=0; i<nodes.length; i++){
+  			if (s != ''){
+  				s += ',';
+  			}
+  			var nodeId=nodes[i].id;
+			if(nodeId.length==9){
+				s += nodeId;
+			}
+  		}
+  		if(s.trim()==""){
+  			 BUI.Message.Alert('请选择功能模块。',function(){
+  	        },'info');
+  			//让信息框按钮获取焦点
+  		    $(".bui-stdmod-footer button").focus();
+  			 return false;
+  		}
+  		$("#functionIds").val(","+s+",");
+  		
+  		  
+	 	if(f1.isValid()){
+          $.ajax({  
+              type : 'POST',  
+               url : base.serverContet+'/manager/loginIn/SysRoleInfo/saveAddUnitRole.do',  
+              data: $('#J_Form').serialize(),  
+              //同步  
+              async : false,  
+              success : function(data) {  
+            	  if(JSON.parse(data).code=="000"){
+            		  BUI.Message.Alert('信息修改成功',function(){
+            			  top.topManager.reloadPage("001001001")
+            			  top.topManager.closePage();
+            	        },'info');
+            		//让信息框按钮获取焦点
+            		    $(".bui-stdmod-footer button").focus();
+                   }else{
+             		  BUI.Message.Alert('信息保存失败，系统繁忙',function(){
+             	        },'info');
+             		//让信息框按钮获取焦点
+             		    $(".bui-stdmod-footer button").focus();
+                   }
+              },error : function() {  
+              }  
+          });  
+          return false;
+	 	}
+    });
+	return false;
+    } );
+  //})
+</script>

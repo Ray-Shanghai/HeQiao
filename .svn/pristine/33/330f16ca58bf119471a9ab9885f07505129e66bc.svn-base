@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sd.farmework.mapper.CurrencyNoteMapper">
+
+	<resultMap type="com.sd.farmework.pojo.CurrencyNote" id="CurrencyNoteMapForMysql">
+
+		<result column="NOTE_ID" property="noteId" />
+		<result column="TITLE" property="title" />
+		<result column="DO_SIGN_UNIT_ID" property="doSignUnitId" />
+		<result column="DO_SIGN_UNIT_NAME" property="doSignUnitName" />
+		<result column="DO_SIGN_DEPART_ID" property="doSignDepartId" />
+		<result column="DO_SIGN_DEPART_NAME" property="doSignDepartName" />
+		<result column="DO_MAIN" property="doMain" />
+		<result column="DO_CONTENT" property="doContent" />
+		<result column="RETURN_DATE" property="returnDate" />
+		<result column="AUDIT_STATUS" property="auditStatus" />
+		<result column="NOTE_TYPE" property="noteType" />
+		<result column="APPLY_DATE" property="applyDate" />
+		<result column="NEED_DATE" property="needDate" />
+		<result column="PAY_MONEY" property="payMoney" />
+		<result column="PREVIOUS_BUDGET_MONEY" property="previousBudgetMoney" />
+		<result column="CURRENT_BUDGET_MONEY" property="currentBudgetMoney" />
+		<result column="PAYEE" property="payee" />
+		<result column="POSTION_PROXY_PERSON" property="postionProxyPerson" />
+		<result column="POSTION_PROXY_PERSON_ID" property="postionProxyPersonId" />
+		<result column="POSTION" property="postion" />
+		<result column="LEAVE_START_DATE" property="leaveStartDate" />
+		<result column="LEAVE_END_DATE" property="leaveEndDate" />
+		<result column="LEAVE_START_TIME" property="leaveStartTime" />
+		<result column="LEAVE_END_TIME" property="leaveEndTime" />
+		<result column="LEAVE_DAY" property="leaveDay" />
+		<result column="LEAVE_TOTAL_TIME" property="leaveTotalTime" />
+		<result column="LEAVE_TYPE" property="leaveType" />
+		<result column="seal_id" property="sealId" />
+		<result column="seal_name" property="sealName" />
+		<result column="file_id" property="fileId" />
+		<result column="file_name" property="fileName" />
+		<result column="file_type_id" property="fileTypeId" />
+		<result column="file_type_name" property="fileTypeName" />
+		<result column="title_num" property="titleNum" />
+		<result column="approven_person_id" property="approvenPersonId"/>
+		<result column="approven_person_name" property="approvenPersonName"/>
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="STATUS" property="status" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+	</resultMap>
+	<insert id="addForMysql" parameterType="com.sd.farmework.pojo.CurrencyNote"
+		useGeneratedKeys="true" keyProperty="noteId">
+		insert into currency_note
+		(
+		title,
+		do_main,
+		do_content,
+		return_date,
+		do_sign_depart_id,
+		do_sign_depart_name,
+		do_sign_unit_id,
+		do_sign_unit_name,
+		seal_id,
+		seal_name,
+		file_id,
+		file_name,
+		file_type_id,
+		file_type_name,
+		title_num,
+		create_user_id,
+		create_user_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		create_time,
+		note_type,
+		apply_date,
+		need_date,
+		pay_money,
+		previous_budget_money,
+		current_budget_money,
+		payee,
+		postion_proxy_person,
+		postion_proxy_person_id,
+		postion,
+		leave_start_date,
+		leave_end_date,
+		leave_start_time,
+		leave_end_time,
+		leave_day,
+		leave_total_time,
+		leave_type,
+		approven_person_id,
+		approven_person_name
+		 )
+		values
+		(
+		#{title},
+		#{doMain},
+		#{doContent},
+		#{returnDate},
+		#{doSignDepartId},
+		#{doSignDepartName},
+		#{doSignUnitId},
+		#{doSignUnitName},
+		#{sealId},
+		#{sealName},
+		#{fileId},
+		#{fileName},
+		#{fileTypeId},
+		#{fileTypeName},
+		#{titleNum},
+		#{createUserId},
+		#{createUserName},
+		#{createDepartId},
+		#{createDepartName},
+		#{createUnitId},
+		#{createUnitName},
+		sysdate(),
+		#{noteType},
+		#{applyDate},
+		#{needDate},
+		#{payMoney},
+		#{previousBudgetMoney},
+		#{currentBudgetMoney},
+		#{payee},
+		#{postionProxyPerson},
+		#{postionProxyPersonId},
+		#{postion},
+		#{leaveStartDate},
+		#{leaveEndDate},
+		#{leaveStartTime},
+		#{leaveEndTime},
+		#{leaveDay},
+		#{leaveTotalTime},
+		#{leaveType},
+		#{approvenPersonId},
+		#{approvenPersonName}
+		 )
+	</insert>
+
+	<update id="update" parameterType="com.sd.farmework.pojo.CurrencyNote">
+		UPDATE currency_note SET
+		AUDIT_STATUS=#{auditStatus}
+		WHERE NOTE_ID=#{noteId}
+	</update>
+	<!-- 根据权限查出所有的待审核的列表 -->
+	<select id="queryWaitingListAll" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+	c.*,
+	s.APPROVEN_FUNCTION_ID,
+	s.task_id,
+	s.approven_postion
+	FROM currency_note c, sys_approven_task s
+	WHERE c.note_id =s.SOURCE_TABLE_PK_COLUMN_VALUE
+	<if test="approvenDepartId!=null and approvenDepartId!=''">
+		and approven_depart_id=#{approvenDepartId}
+	</if>
+	AND APPROVEN_POSTION = #{approvenPostion}
+	AND AUDIT_STATUS='1' and rule_order='1'
+	</select>
+	<select id="queryByPkIdForMysql" parameterType="String"
+		resultMap="CurrencyNoteMapForMysql">
+		SELECT * FROM currency_note WHERE note_id=#{noteId}
+	</select>
+	<select id="queryCountForMysql"  parameterType="com.sd.farmework.pojo.CurrencyNote"  resultType="java.lang.Integer">
+   		select    count(*) from currency_note where   1=1
+		<if test="noteType!=null and noteType!=''">
+			and substring(note_type,1,1) =substring(#{noteType},1,1)
+		</if>
+		<if test="createTime!=null">
+			and create_time like concat('%',#{createTime},'%')
+		</if>
+		<if test="leaveType!=null and leaveType!=''">
+			and leave_type = #{leaveType}
+		</if>
+		<if test="createUserName!=null and createUserName!=''">
+			and create_user_name like concat('%',#{createUserName},'%')
+		</if>
+		<if test="createUserId!=null and createUserId!=''">
+			and create_user_id =#{createUserId}  
+		</if>
+		<if test="auditStatus!=null and auditStatus!=''">
+	 		and audit_status =#{auditStatus} 
+		</if>
+	</select>
+	<select id="queryListByPageForMysql" parameterType="com.sd.farmework.pojo.CurrencyNote" resultMap="CurrencyNoteMapForMysql">
+		SELECT *
+		from currency_note
+		WHERE 1=1
+		<if test="auditStatus!=null and auditStatus!=''">
+	 		and audit_status =#{auditStatus} 
+		</if>
+		<if test="noteType!=null and noteType!=''">
+	 		and substring(note_type,1,1) =substring(#{noteType},1,1)
+		</if>
+ 		<if test="leaveType!=null and leaveType!=''">
+			and leave_type = #{leaveType}
+		</if>
+		<if test="createUserId!=null and createUserId!=''">
+			and create_user_id =#{createUserId}
+		</if>
+		<if test="createUserName!=null and createUserName!=''">
+			and create_user_name like concat('%',#{createUserName},'%')
+		</if>
+		order by create_time desc
+		LIMIT #{startRecod}, #{pageSize}
+		
+	</select>
+	
+	<delete id="deleteForMysql" parameterType="com.sd.farmework.pojo.CurrencyNote">
+		delete from currency_note where note_id=#{noteId}
+	</delete>
+</mapper> 
+

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sd.farmework.mapper.SysZhichuTypeMapper">
+
+	<resultMap type="com.sd.farmework.pojo.SysZhichuType" id="SysZhichuTypeMapForMysql">
+
+		<result column="main_id" property="mainId" />
+		<result column="zc_id" property="zcId" />
+		<result column="zc_type_name" property="zcTypeName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="STATUS" property="status" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+	</resultMap>
+	<insert id="addForMysql" parameterType="com.sd.farmework.pojo.SysZhichuType"
+		useGeneratedKeys="true" keyProperty="mainId">
+		<selectKey keyProperty="zcId" order="BEFORE" resultType="java.lang.String">
+			SELECT IF(ISNULL(MAX(CAST(zc_id AS SIGNED))+1),CONCAT(#{zcId},0,1),MAX(CAST(zc_id AS SIGNED))+1) FROM sys_zhichu_type
+				where zc_id like CONCAT('',#{zcId},'%')	
+		</selectKey>
+		insert into sys_zhichu_type
+		(
+		zc_id,
+		zc_type_name,
+		create_user_id,
+		create_user_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		create_time,
+		status
+		 )
+		values
+		(
+		#{zcId},
+		#{zcTypeName},
+		#{createUserId},
+		#{createUserName},
+		#{createDepartId},
+		#{createDepartName},
+		#{createUnitId},
+		#{createUnitName},
+		sysdate(),
+		#{status}
+		 )
+	</insert>
+	<!-- 修改支出类型表 -->
+	<update id="updateForMysql" parameterType="com.sd.farmework.pojo.SysZhichuType">
+		UPDATE sys_zhichu_type SET
+		zc_id=#{zcId},
+		zc_type_name=#{zcTypeName}
+		WHERE main_id=#{mainId}
+	</update>
+	
+	<!-- 根据主键查询支出类型信息 -->
+	<select id="queryByPkIdForMysql" parameterType="String"
+		resultMap="SysZhichuTypeMapForMysql">
+		SELECT * FROM sys_zhichu_type WHERE main_id=#{mainId}
+	</select>
+	<!-- 根据类型id查询类型 -->
+	<select id="queryByIdForMysql" parameterType="com.sd.farmework.pojo.SysZhichuType" resultMap="SysZhichuTypeMapForMysql">
+		SELECT * FROM sys_zhichu_type where zc_id=#{zcId}
+	</select>
+	<!-- 查询所有支出类型信息 -->
+	<select id="queryListForMysql" resultMap="SysZhichuTypeMapForMysql" parameterType="com.sd.farmework.pojo.SysZhichuType">
+		select * from sys_zhichu_type
+		where 1=1
+		<if test="zcTypeName!=null and zcTypeName!=''">
+			and zc_id like CONCAT('',#{zcTypeName},'%')
+		</if>
+		order by cast(zc_id as SIGNED)
+	</select>
+	
+	
+	<delete id="deleteForMysql" parameterType="com.sd.farmework.pojo.SysZhichuType">
+		delete from sys_zhichu_type WHERE zc_id=#{zcId}
+	</delete>
+</mapper> 
+

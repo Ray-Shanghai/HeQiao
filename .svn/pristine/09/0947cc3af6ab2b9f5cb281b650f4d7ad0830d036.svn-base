@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="../css/reset.css" />
+	<link rel="stylesheet" href="../css/content.css" />
+	<link rel="stylesheet" href="../js/skins/molv/laydate.css" />
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/laydate.js"></script>
+	<script type="text/javascript" src="../js-date/WdatePicker.js"></script>
+	<script src="../../../resources/js/base.js"></script>
+	<script src="../../../resources/js/title.js"></script>
+	<script src="../../../resources/js/queryUnitOrDepart.js"></script>
+	<style type="text/css">
+		.p_img{
+		cursor: pointer;
+		border: 1px solid #944721;
+    	width: 20px;
+    	float: right;
+	}
+	</style>
+	<script type="text/javascript">
+		function queryUser(){
+			$("#showPerson").show();
+			$.ajax({  
+	      		type : 'POST',  
+	       		url : base.serverContet+'/manager/loginIn/currencyNote/queryUser.do',  
+	      		async : false,  
+	      		success : function(data) {
+	      			$(".remove").remove();
+	        	  	if(data.code=="000"){
+	        	  		$.each(data.list,function(index,tag){
+	            	  		$("#showPerson").find(".th").parent().after("<tr class='remove'><td><input class='radio' type='radio' name='radio' value='"+this.userId+"'></td><td>"+this.userName+"</td></tr>");
+	        	  		})
+	        	  	}else{alert(data.msg)}
+	      		},error : function() {} 
+			});
+		}
+		function selectPerson(){
+			var obj=$("#showPerson").find("input[type='radio']:checked");
+			$("input[name='approvenPersonName']").val(obj.parent().next().text());
+			$("input[name='approvenPersonId']").val(obj.val());
+			$("#showPerson").hide();
+		}
+		function addRow(obj){
+			var cloneData=$("#img").next().clone(); 
+			$("#img").next().after(cloneData);
+		}
+		function removeRow(obj){
+			var trLength= $(".cloneData").length;
+			if(trLength>1){
+				$(obj).parents()[5].remove();
+			}else{
+				alert("不能再删除了！");
+			}
+		}
+		function addData() {
+			batch("list","detailAbstract,detailSumMoney,detailCash,detailBank,detailCheckNo,detailBankMoney","row");
+			if($("#doSignUnitName").val()!=""&&
+				$("#doSignDepartName").val()!=""&&
+				$("input[name='applyDate']").val()!=""&&
+				$("input[name='applyDate']").val()!=""&&
+				$("input[name='needDate']").val()!=""&&
+				$("input[name='payee']").val()!=""&&
+				$("input[name='doMain']").val()!=""){
+				if(confirm("您确认要提交吗？")){
+					$.ajax({  
+		          		type : 'POST',  
+		           		url : base.serverContet+'/manager/loginIn/currencyNote/add.do',  
+		         		data: $('#J_Form').serialize(),  
+		          		async : false,  
+		          		success : function(data) {  
+		            	  	if(data.code=="000"){
+		            		    alert("添加成功");
+		            		    history.go(0);
+		                   	  }else{
+		                   		base.alert(data,2);
+		                	    return false;
+		                   	  }
+		          		   },error : function() {
+		          			   
+		          		   },beforeSend:function(){
+								$("#add").attr("disabled","disabled");
+							},complete: function () {
+								$("#add").removeAttr("disabled");
+							}
+		      		}); 
+				}
+			}else{
+				alert("请填写完整信息！");
+			}
+ 		}
+		
+		window.onload=setTimeout(function setDeaprt(){
+			$("#depart").val(user.departName)},300);
+		
+		//设置批量名称(name的顺序和input的顺序要一致)
+		function batch(para,name,row){
+			var names=name.split(",");
+			var rows=$("."+row);
+			for (var j = 0; j < rows.length; j++) {
+				for (var i = 0; i < names.length; i++) {
+					$("."+row).eq(j).find("input").eq(i).attr("name",para + "[" + j + "]."+names[i]);
+				}
+			}
+		}
+		$(function(){
+			var zcId=window.localStorage.getItem("zcId");
+			$("#zcTypeName").val(window.localStorage.getItem("zcTypeName"));
+			$("#noteType").val(zcId);
+			var unitId=window.localStorage.getItem("unitId");
+			var unitName=window.localStorage.getItem("unitName");
+			$("#doSignUnitId").val(unitId);
+			$("#doSignUnitName").val(unitName);
+			$("#company").val(unitName);
+			//生成单号
+			getTitle("101");
+			
+			$("input[name='cash']").click(function(){
+				if($(this).is(":checked")){
+					for (var i = 0; i < $(".cash").length; i++) {
+						$($(".cash")[i]).removeAttr("readonly");
+					}
+				}else{
+					for (var i = 0; i < $(".cash").length; i++) {
+						$($(".cash")[i]).val("");
+						$($(".cash")[i]).attr("readonly","readonly");
+					}
+				}
+			});
+			$("input[name='bank']").click(function(){
+				if($(this).is(":checked")){
+					for (var i = 0; i < $(".bank").length; i++) {
+						$($(".bank")[i]).removeAttr("readonly");
+					}
+				}else{
+					for (var i = 0; i < $(".bank").length; i++) {
+						$($(".bank")[i]).val("");
+						$($(".bank")[i]).attr("readonly","readonly");
+					}
+				}
+			})
+			$("input[name='check']").click(function(){
+				if($(this).is(":checked")){
+					for (var i = 0; i < $(".check").length; i++) {
+						$($(".check")[i]).removeAttr("readonly");
+					}
+				}else{
+					for (var i = 0; i < $(".check").length; i++) {
+						$($(".check")[i]).val("");
+						$($(".check")[i]).attr("readonly","readonly");
+					}
+				}
+			})
+			$("input[name='bankMoney']").click(function(){
+				if($(this).is(":checked")){
+					for (var i = 0; i < $(".bankMoney").length; i++) {
+						$($(".bankMoney")[i]).removeAttr("readonly");
+					}
+				}else{
+					for (var i = 0; i < $(".bankMoney").length; i++) {
+						$($(".bankMoney")[i]).val("");
+						$($(".bankMoney")[i]).attr("readonly","readonly");
+					}
+				}
+			})
+		       /* 限制文本框只能输入数字和小数点*/  
+            $(".checknumber").keyup(function(){    
+                    $(this).val($(this).val().replace(/[^0-9.]/g,''));    
+                }).bind("paste",function(){  //CTR+V事件处理    
+                    $(this).val($(this).val().replace(/[^0-9.]/g,''));     
+                }).css("ime-mode", "disabled"); //CSS设置输入法不可用    
+			
+		});
+		
+	</script>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+		<form id="J_Form" onsubmit="return false">
+		<input type="hidden"  id="noteType" name="noteType" value="">
+		<input type="hidden"  name="title" value="">
+		<input type="hidden"  name="titleNum" value="">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr>
+ 						<th id="title" class="th" colspan="2">支出申请流程</th>
+ 
+					</tr>
+					<tr> 
+						<td class="table_td_left ">流程标题</td>
+						<td id="formTitle" class="table_td_right pd_left_10"></td>
+					</tr>
+					<!-- <tr> 
+						<td class="table_td_left">项目公司</td>
+						<td class="table_td_right">
+							<input type="text" readonly="readonly" id="doSignUnitName" name="doSignUnitName" class="border_input">
+							<input type="hidden" id="doSignUnitId" name="doSignUnitId" class="border_input">
+							<img onclick="queryUnit()" src="../images/find.png" class="catchImage">
+							<div id="num" class="fr" style="padding-right: 30px;"></div>
+						</td>
+					</tr> -->
+					<tr> 
+						<td class="table_td_left">签呈主旨</td>
+						<td class="table_td_right">
+							<input type="text" name="doMain" class="border_input" style="width: 90%"> 
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">支出类型</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+										<input readonly="readonly" type="text" id="zcTypeName" class="border_input" style="width:40%" >
+									</td> 
+									<td class="table_td_left">发起部门</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<input readonly="readonly" type="text" id="doSignDepartName" name="doSignDepartName" class="border_input" style="width:60%">
+										<input type="hidden"  id="doSignDepartId" name="doSignDepartId" value=""> 
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">申办日期</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" >
+										<span>
+										<label onclick="WdatePicker()">
+											<input type="text" name="applyDate"  class="border_input" onclick="WdatePicker()" readonly="readonly" style="width: 35%;cursor:pointer;">
+											<img class="catchImage" src="../images/time.png"> 	
+										</label>
+										</span>									
+									</td> 
+									<td  style="width: 20%">截止上案预算余额</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<input type="text"  name="previousBudgetMoney"  class="border_input checknumber"  style="width: 80%;"><span>元</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">需要日期</td>
+						<td class="table_td_right">
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3">
+										<span>
+										<label onclick="WdatePicker()">
+											<input type="text" name="needDate" class="border_input " readonly="readonly" style="width: 35%;cursor:pointer;">
+											<img class="catchImage" src="../images/time.png"> 
+										</label>	
+										</span>
+									</td> 
+									<td  style="width: 20%">本案实支金额</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<input type="text" name="payMoney"  class="border_input checknumber"  style="width: 80%;"><span>元</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">审核人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%;" colspan="3" class="table_td_right pd_left_10">
+										<input  readonly="readonly" type="hidden" name="approvenPersonId" value="">
+										<input readonly="readonly" type="text" value="" name="approvenPersonName" class="border_input" style="width:80%;text-align: center;">
+										<img onclick="queryUser()" src="/HeQiao/page/heqiao/images/find.png" class="catchImage"> 
+									</td> 
+									<td  style="width: 20%">截止本案预算金额</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<input type="text" name="currentBudgetMoney"  class="border_input checknumber"  style="width: 80%;"><span>元</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">受款人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3">
+										<span>
+											<input type="text" name="payee" class="border_input"   style="width: 35%;">
+										</span>
+									</td> 
+									<td  style="width: 20%"></td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr id="img"> 
+						<td class="table_td_left" colspan="2">
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 5%"  rowspan="2">
+										<div>
+											<p>项</p>
+											<p><img style="cursor: pointer;" onclick="addRow(this)" src="../images/add.png"></p>
+										</div>
+									</td>
+									<td style="width: 27%"  rowspan="2" colspan="2">
+										<span>摘要</span>
+									</td>
+									<td style="width: 20%"  rowspan="2"><span>请款金额</span></td> 
+									<td style="width: 16%"><input class="checkBox" type="checkbox" name="cash"/>现金</td>
+									<td style="width: 10%"><input class="checkBox" type="checkbox" name="bank"/>支票</td>
+									<td style="width: 14%"><input class="checkBox" type="checkbox" name="check"/>电汇</td>
+									<td style="width: 18%"><input class="checkBox" type="checkbox" name="bankMoney"/>其他</td>
+								</tr>
+								<tr>
+									<td>现金金额</td>
+									<td>银行别</td>
+									<td>支票号</td>
+									<td>银行金额</td>
+								</tr> 
+							</table>	
+						</td>
+					</tr>
+					<tr class="cloneData"> 
+						<td class="table_td_left" colspan="2">
+							<table class="public-cont-table">
+								<tr class="row">
+									<td style="width: 5%">
+										<img style="cursor: pointer;" class="removeImg" onclick="removeRow(this)" src="../images/jian.png">
+									</td>
+									<td style="width: 27%" colspan="2" class="table_td_right pd_left_10">
+										<input type="text" name="" value="" class="border_input" style="width: 80%;">
+									</td>
+									<td style="width: 20%" class="table_td_right pd_left_10">
+										<input type="text" name="" value="" class="border_input checknumber" style="width: 80%;"> 
+									</td> 
+									<td style="width: 16%" class="table_td_right pd_left_10"> 
+										<input readonly="readonly" type="text" name="" value="" class="border_input cash checknumber" style="width: 80%;">
+									</td>
+									<td style="width: 10%" class="table_td_right pd_left_10">
+										<input readonly="readonly" type="text" name="" value="" class="border_input bank" style="width: 80%;"> 
+									</td>
+									<td style="width: 14%" class="table_td_right pd_left_10"> 
+										<input readonly="readonly" type="text" name="" value="" class="border_input check" style="width: 80%;">
+									</td>
+									<td style="width: 18%" class="table_td_right">
+										<input readonly="readonly" type="text" name="" value="" class="border_input bankMoney checknumber" style="width: 80%;">
+									</td>
+								</tr>
+							</table>	
+						</td>
+					</tr>
+					<tr>
+						<td  colspan="2"><div class="subBtn"><input type="submit" name="" id="add" onclick="addData()" value="提 交"> <input type="reset" onclick="javascript:history.go(0)" value="重 填"></div></td>
+					</tr>
+				</table>
+			</div>
+			</form>
+		</div>
+	</div>
+	<div id="showCompany" class="showBox">
+		<table>
+			<tr>
+				<th class="th" colspan="2">选择公司
+					<p class="p_img close">
+							<img src="../images/close.png">
+					</p>
+				</th>
+			</tr>
+			<tr>
+				<th colspan="2"><div class="subBtn"><input type="button" id="selectCompany" name="selectCompany" value="选    择"></div></th>
+			</tr>
+		</table>
+	</div>
+	<div id="showPerson" class="showBox">
+		<table>
+			<tr>
+				<th class="th" colspan="2">选择审核人
+					<p class="p_img close">
+							<img src="../images/close.png"> 	
+					</p>
+				</th>
+			</tr>
+			<tr>
+				<th colspan="2"><div class="subBtn"><input type="button" onclick="selectPerson();" value="选    择"></div></th>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/bootstrap.min.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jqPaginator.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/checkAll.js"></script>
+	<script type="text/javascript" src="/HeQiao/resources/js/base.js"></script>
+	<script type="text/javascript" src="/HeQiao/wxpage/build/pdf.js"></script>
+	<script type="text/javascript" src="/HeQiao/wxpage/build/pdf.worker.js"></script>
+	<style type="text/css">
+		.noticeContent{
+		    padding: 50px;
+		    letter-spacing: 1px;
+		    line-height: 26px;
+	        color: #666;
+    		font-size: 16px;
+		}
+	</style>
+    <script type="text/javascript">
+    	function downloadNotice(obj){
+    		var url=$(obj).attr("val");
+    		if(confirm("您真的要下载吗？")){
+    			$(obj).attr("href",url);
+    		}
+    	}
+    </script>
+</head>
+<body marginwidth="0" marginheight="0">
+		<div class="public-content">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr class>
+						<th class="th" colspan="2">系统公告</th>
+					</tr>
+					<tr>
+						<td class="h3">
+							<div>${notice.noticeTitle}</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_td_right pd_left_10 h4 noticeContent">
+							<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${notice.noticeContent}</div>
+							<br/>
+							<div style="text-align: right;padding-right:10px;">
+								发布部门：${notice.departName}<br/>
+								发布时间：${notice.createTime}
+							</div>
+						</td>
+					</tr>
+					<#list fileList as file>
+					<tr>
+						<td class="pd_left_10" style="text-align: center;">
+							<div class="fileInfo">
+								<a onclick="downloadNotice(this)" style="cursor:pointer;" class="download" val="/HeQiao/${file.filePath}&resouceName=${file.fileName}">${file.fileName}</a>
+							</div> 
+						</td>
+					</tr>
+					</#list>
+					<tr>
+						<td colspan="2">
+							<div class="subBtn">
+								<input type="button" onclick="javascript:history.go(-1)" value="返回">
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title> 表单中的表格</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  	<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+   <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+   <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+   <style type="text/css">
+   #tab{
+   	width:100%;
+   	height: 100%;
+   	border-bottom: 1px dashed #ddd;
+   	border-right: 1px dashed #ddd;
+   }
+    #tab td,th{
+   		border-top:1px dashed #ddd;
+   		border-left:1px dashed #ddd;
+   		text-align: center;
+   		padding: 8px;
+   }
+   #tab input{
+   	border: none;
+	width:100px;
+   	height: 20px;
+   }
+	.divbut{width:300px; margin:50px auto;}
+	
+	.butForm{background:#0599d9; margin-left:60px; padding:8px 20px; color:#fff; border:none; border-radius:3px; box-shadow:3px 3px 2px #aaa; font-size:14px; font-weight:600;}   
+   .unitSelectClass{
+   		width: 200px;
+   }
+   </style>
+   </head>
+  <body>
+  	<div style="margin:8px 10px;">
+  		<h3 style="float: left;">所属部门：<span id="cname"></span></h3>
+  		<select id="unitSelect" name="approvenUnitId" class="unitSelectClass">
+  		</select>
+  	</div>
+  	<form id="tabForm">
+  	<input type="hidden" name="approvenUnitId" id="approvenUnitId">
+  	<input type="hidden" name="approvenTypeId" id="approvenTypeId">
+  	<input type="hidden" name="approvenTypeName" id="approvenTypeName">
+  	<table id="tab" cellspacing="0" cellpadding="0">
+  		<thead>
+  			<tr>
+  				<th><div style="width: 100px;"></div></th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  		</tbody>
+  	</table>
+  	<div class="divbut">
+  		<button id="tabBut" type="button" class="butForm">提交</button>
+  		
+  		<button type="reset" class="butForm">重置</button>
+  	</div>
+  	</form>
+  </body>
+  <script type="text/javascript" src="../../assets/js/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="../../assets/js/template.js"></script>
+  <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+ <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+  <script type="text/javascript" src="../../../resources/js/base.js"></script>
+  
+  <script type="text/html" id="tmpTitle">
+	{{each list as depart j}}
+	    <th><input type='hidden' name='{{depart.authorityId}}'>{{depart.authorityName}}</th>
+	{{/each}}
+  </script>
+  <script type="text/html" id="tmpBody">
+	{{each list as depart i}}
+		<tr>
+	    <td>{{depart.authorityName}}</td>
+		{{each list as depart2 j}}
+	    	<td><input type='number' min="0" class='positionNo' value='0' name="{{depart.authorityId}},{{depart2.authorityId}}">
+				<input type='hidden'  name='approvenExps'>
+				<input type='hidden' name='applyPositionNos' value='{{depart.authorityId}}'>
+				<input type='hidden' name='applyPositionIds' value='{{depart.sysId}}'>
+				<input type='hidden' name='applyPositionNames' value='{{depart.authorityName}}'>
+				<input type='hidden' name='approvenPositionNos' value='{{depart2.authorityId}}'>
+				<input type='hidden' name='approvenPositionIds' value='{{depart2.sysId}}'>
+				<input type='hidden' name='approvenPositionNames' value='{{depart2.authorityName}}'>
+			</td>
+		{{/each}}
+		</tr>	
+	{{/each}}
+  </script>
+  <script type="text/html" id="tmpBody2">
+	{{each list as depart i}}
+		<tr>
+	    <td>{{depart.authorityName}}</td>
+		{{each list as depart2 j}}
+	    	<td><input type='CheckBox' class='positionNo' value='1' name="{{depart.authorityId}},{{depart2.authorityId}}">
+				<input type='hidden'  name='approvenExps'>
+				<input type='hidden' name='applyPositionNos' value='{{depart.authorityId}}'>
+				<input type='hidden' name='applyPositionIds' value='{{depart.sysId}}'>
+				<input type='hidden' name='applyPositionNames' value='{{depart.authorityName}}'>
+				<input type='hidden' name='approvenPositionNos' value='{{depart2.authorityId}}'>
+				<input type='hidden' name='approvenPositionIds' value='{{depart2.sysId}}'>
+				<input type='hidden' name='approvenPositionNames' value='{{depart2.authorityName}}'>
+			</td>
+		{{/each}}
+		</tr>	
+	{{/each}}
+  </script>
+  <script type="text/html" id="tmpHead">
+	{{each list as depart j}}
+	    <option value='{{depart.departId}}'>{{depart.departName}}</option>
+	{{/each}}
+  </script>
+<script type="text/javascript">
+var unitId="";
+var zcId ="";
+var zcTypeName ="";
+$(function(){
+  if(window.location.search.split("?").length>1){
+		zcId =window.location.search.split("?")[1].split("=")[1].split("&")[0];
+		zcTypeName =unescape(window.location.search.split("?")[1].split("=")[2].split("&")[0]);
+		$("#approvenTypeId").val(zcId);
+		$("#approvenTypeName").val(zcTypeName);
+	  } 
+	$.ajax({
+		url:base.serverContet+'/manager/loginIn/SysDepartInfo/queryUnitDataList.do',
+		async:false,
+		type:'post',
+		dataType:'json',
+		success:function(result){
+			//alert(JSON.stringify(result));
+			$("#unitSelect").append(template('tmpHead',{list:result}));
+		}
+		
+	});
+			
+	unitId=$("#unitSelect option:selected").val();
+	$("#approvenUnitId").val(unitId);
+		//下拉框选中
+	$("#unitSelect").change(function(){
+	 	unitId=$("#unitSelect option:selected").val();
+	 	queryTabData();
+	 	$("#approvenUnitId").val(unitId);
+	})
+			
+	$.ajax({
+		url:base.serverContet+'/manager/loginIn/sysAuthority/authorityDataList.do',
+		async:false,
+		type:'post',
+		dataType:'json',
+		success: function(result){
+			var html=template('tmpTitle',{list:result});
+			$("#tab").find("tr").eq(0).append(html);
+			if(zcId!="301"){
+				$("#tab tbody").append(template('tmpBody',{list:result}));
+			}else{
+				$("#tab tbody").append(template('tmpBody2',{list:result}));
+			}
+			queryTabData();
+		},error: function(result){
+			consol.info("网络异常");
+		}
+	})
+			
+  function queryTabData(){
+	  $.ajax({
+	    	url:base.serverContet+'/manager/loginIn/HqApprovenRules/HqApprovenRuleList.do',
+	    	type:"post",
+	    	data:{'approvenTypeId':zcId,'approvenTypeName':zcTypeName,'approvenUnitId':unitId},
+	    	dataType:'json',
+	    	async:false,
+	    	success: function(result){
+	    		//alert(JSON.stringify(result));
+	    		if(zcId!="301"){
+		    		if(result.length==0){
+		    			$.each($(".positionNo"),function(index,tag){
+		    				$(this).val("0");
+		    				$(this).next().val("0");
+		    			})
+		    		}else{
+		    			//清除残留记录
+		    			$.each($(".positionNo"),function(index,tag){
+		    				$(this).val("0");
+		    				$(this).next().val("0");
+		    			})
+		    			//回显
+			    		for(var i=0;i<result.length;i++){
+			    			var trueNum=result[i].applyPositionNo+','+result[i].approvenPositionNo
+			    			var positionNos=$(".positionNo");
+			    			for(var k=0;k<positionNos.length;k++){
+			    				positionNos[k]=positionNos[k].getAttribute('name');
+			    			}
+			    			for(var j=0; j<positionNos.length;j++){
+			    				if(trueNum==positionNos[j]){
+			    					$("input[name='"+positionNos[j]+"']").val(result[i].approvenExp);
+			    					$("input[name='"+positionNos[j]+"']").next().val(result[i].approvenExp);
+			    				}
+			    			}
+			    		}
+		    		}
+	    		}else{
+	    			if(result.length>0){
+	    				//清除残留记录
+	    				$.each($(".positionNo"),function(index,tag){
+		    				$(this).removeAttr("checked");
+		    				$(this).next().val("0");
+		    			})
+		    			//回显
+	    				for(var i=0;i<result.length;i++){
+			    			var trueNum=result[i].applyPositionNo+','+result[i].approvenPositionNo
+			    			var positionNos=$(".positionNo");
+			    			for(var j=0; j<positionNos.length;j++){
+			    				if(trueNum==positionNos.eq(j).attr("name")&&positionNos.eq(j).val()=="1"){
+			    					positionNos.eq(j).attr("checked","true");
+			    					positionNos.eq(j).next().val(result[i].approvenExp);
+			    				}
+			    			}
+			    		}
+	    			}else{
+	    				//清除残留记录
+	    				$.each($(".positionNo"),function(index,tag){
+		    				$(this).removeAttr("checked");
+		    				$(this).next().val("0");
+		    			})
+	    			}
+	    		}
+	    	}
+	    })
+  }
+  
+	 $(".positionNo").live("change",function(){
+		 if(zcId!="301"){
+			 	$(this).next().val($(this).val());
+		 }else{
+			 if($(this).is(":checked")){
+			 	$(this).next().val($(this).val());
+			 }else{
+		 		$(this).next().val("0");
+			 }
+		 }
+	 })
+ 
+ $("#tabBut").click(function(){
+	 if(zcId!=""&&zcTypeName!=""){
+		 if(unitId!=""){
+			 $.ajax({
+				 url:base.serverContet+'/manager/loginIn/HqApprovenRules/addHqApprovenRule.do',
+				 type:'post',
+				 data:$("#tabForm").serialize(),
+				 dataType:'json',
+				 success:function (result){
+					if(result.code=='000'){
+						BUI.Message.Alert('更新审批规则成功。',function(){},'info');
+						//让信息框按钮获取焦点
+              		    $(".bui-stdmod-footer button").focus();
+					}else{
+						BUI.Message.Alert('审批规则定义错误。',function(){},'info');
+						//让信息框按钮获取焦点
+              		    $(".bui-stdmod-footer button").focus();
+					}
+				 },
+				 error:function (){
+					 consol.info("网络异常");
+				 }
+			 })
+		 }else{BUI.Message.Alert('请选择所属公司。',function(){},'info');
+		 	//让信息框按钮获取焦点
+		    $(".bui-stdmod-footer button").focus();
+		 }
+	 }else{BUI.Message.Alert('请选择上方的类型。',function(){},'info');
+	 	//让信息框按钮获取焦点
+	    $(".bui-stdmod-footer button").focus();
+	 }
+ })
+		});
+</script>
+</html>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.sd.farmework.mapper.SysApprovenFunctionRuleMapper"> 
+
+		<resultMap type="com.sd.farmework.pojo.SysApprovenFunctionRule" id="SysApprovenFunctionRuleMapForMysql"> 
+
+		<result column="APPROVEN_RULE_ID" property="approvenRuleId"/>
+		<result column="APPROVEN_RULE_NAME" property="approvenRuleName"/>
+		<result column="APPROVEN_FUNCTION_ID" property="approvenFunctionId"/>
+		<result column="APPROVEN_FUNCTION_NAME" property="approvenFunctionName"/>
+		<result column="RULE_IS_ORDERLY" property="ruleIsOrderly"/>
+		<result column="APPROVEN_REMARK" property="approvenRemark"/>
+		<result column="APPROVEN_TEAM_ID" property="approvenTeamId"/>
+		<result column="APPROVEN_TEAM_NAME" property="approvenTeamName"/>
+		<result column="APPROVEN_DEPART_ID" property="approvenDepartId"/>
+		<result column="APPROVEN_DEPART_NAME" property="approvenDepartName"/>
+		<result column="APPROVEN_UNIT_ID" property="approvenUnitId"/>
+		<result column="APPROVEN_UNIT_NAME" property="approvenUnitName"/>
+		
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="REMARK" property="remark"/>
+		<result column="STATUS" property="status"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="CREATE_USER_ID" property="createUserId"/>
+		<result column="CREATE_USER_NAME" property="createUserName"/>
+		<result column="CREATE_TEAM_ID" property="createTeamId"/>
+		<result column="CREATE_TEAM_NAME" property="createTeamName"/>
+		<result column="CREATE_DEPART_ID" property="createDepartId"/>
+		<result column="CREATE_DEPART_NAME" property="createDepartName"/>
+		<result column="CREATE_UNIT_ID" property="createUnitId"/>
+		<result column="CREATE_UNIT_Name" property="createUnitName"/>
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime"/>
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"/>
+		<result column="LAST_UPDATE_TEAM_ID" property="lastUpdateTeamId"/>
+		<result column="LAST_UPDATE_TEAM_NAME" property="lastUpdateTeamName"/>
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId"/>
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName"/>
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId"/>
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName"/>
+		<result column="APPROVEN_POSITION" property="approvenPostion"/>
+		<result column="money_exp" property="moneyExp"/>
+		<result column="day_exp" property="dayExp"/>
+       
+		
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+
+	</resultMap>
+
+	<select id="queryForMysql" parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule"  resultMap="SysApprovenFunctionRuleMapForMysql">
+		SELECT 
+		approven_rule_id,
+		approven_rule_name,
+       approven_function_id,
+       approven_function_name,
+       rule_is_orderly,
+       approven_remark,
+       approven_team_id,
+       approven_team_name,
+       approven_depart_id,
+       approven_depart_name,
+       approven_unit_id,
+       approven_unit_name,
+       remark,
+       status,
+       create_time,
+       create_user_id,
+       create_user_name,
+       create_team_id,
+       create_team_name,
+       create_depart_id,
+       create_depart_name,
+       create_unit_id,
+       create_unit_name,
+       APPROVEN_POSITION
+		FROM  sys_approven_function_rule t 
+		where    APPROVEN_FUNCTION_ID=#{approvenFunctionId}   and status='Y'
+		
+		<if test="approvenTeamId!=null and approvenTeamId!=''">
+			AND approven_team_id =#{approvenTeamId}
+		</if>
+		<if test="approvenDepartId!=null and approvenDepartId!=''">
+			AND approven_depart_id =#{approvenDepartId}
+		</if>
+		<if test="approvenUnitId!=null and approvenUnitId!=''">
+			AND approven_unit_id =#{approvenUnitId}
+		</if>
+		
+	</select>
+	<select id="queryListByPageForMysql" parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule"  resultMap="SysApprovenFunctionRuleMapForMysql">
+		<![CDATA[ 
+		 
+		select  approven_rule_id,
+       approven_rule_name,
+       approven_function_id,
+       approven_function_name,
+       rule_is_orderly,
+       approven_remark,
+       approven_team_id,
+       approven_team_name,
+       approven_depart_id,
+       approven_depart_name,
+       approven_unit_id,
+       approven_unit_name,
+       remark,
+       status,
+       create_time,
+       create_user_id,
+       create_user_name,
+       create_team_id,
+       create_team_name,
+       create_depart_id,
+       create_depart_name,
+       create_unit_id,
+       create_unit_name,
+       last_update_time,
+       last_update_user_id,
+       last_update_user_name,
+       last_update_team_id,
+       last_update_team_name,
+       last_update_depart_id,
+       last_update_depart_name,
+       last_update_unit_id,
+       last_update_unit_name,
+       APPROVEN_POSITION
+  from sys_approven_function_rule 
+  
+  LIMIT  #{startRecod},#{pageSize}
+ 		]]> 
+	</select>
+	<select id="queryListForMysql" parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule"  resultMap="SysApprovenFunctionRuleMapForMysql">
+		select approven_rule_id,
+       approven_rule_name,
+       approven_function_id,
+       approven_function_name,
+       rule_is_orderly,
+       approven_remark,
+       approven_team_id,
+       approven_team_name,
+       approven_depart_id,
+       approven_depart_name,
+       approven_unit_id,
+       approven_unit_name,
+       remark,
+       status,
+       create_time,
+       create_user_id,
+       create_user_name,
+       create_team_id,
+       create_team_name,
+       create_depart_id,
+       create_depart_name,
+       create_unit_id,
+       create_unit_name,
+       last_update_time,
+       last_update_user_id,
+       last_update_user_name,
+       last_update_team_id,
+       last_update_team_name,
+       last_update_depart_id,
+       last_update_depart_name,
+       last_update_unit_id,
+       last_update_unit_name,
+       APPROVEN_POSITION,
+       money_exp,
+       day_exp
+  from sys_approven_function_rule where approven_function_id=#{approvenFunctionId} order by rule_is_orderly asc
+
+	</select>
+	<insert id="addForMysql" parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule" >
+	
+	    <selectKey order="BEFORE" resultType="java.lang.String" keyProperty="ruleIsOrderly">  
+            SELECT MAX(RULE_IS_ORDERLY)+1 FROM sys_approven_function_rule  WHERE APPROVEN_FUNCTION_ID=#{approvenFunctionId}
+       </selectKey>  
+	
+	insert into sys_approven_function_rule
+  ( 
+   approven_rule_name,
+   approven_function_id,
+   approven_function_name,
+   rule_is_orderly,
+   approven_remark,
+   approven_team_id,
+   approven_team_name,
+   approven_depart_id,
+   approven_depart_name,
+   approven_unit_id,
+   approven_unit_name,
+    status,
+    create_user_id,
+   create_user_name,
+   create_team_id,
+   create_team_name,
+   create_depart_id,
+   create_depart_name,
+   create_unit_id,
+   create_unit_name,
+   APPROVEN_POSITION,
+   money_exp,
+   day_exp
+   )
+values
+  ( 
+   #{approvenRuleName},
+		#{approvenFunctionId},
+		#{approvenFunctionName},
+		<if test="ruleIsOrderly!=null and ruleIsOrderly!=''">
+			#{ruleIsOrderly},
+		</if>
+		<if test="ruleIsOrderly==null or ruleIsOrderly==''">
+			1,
+		</if>
+		#{approvenRemark},
+   #{approvenTeamId},
+   #{approvenTeamName},
+  #{approvenDepartId},
+   #{approvenDepartName},
+  #{approvenUnitId},
+   #{approvenUnitName},
+   #{status},
+  		#{createUserId},
+		    #{createUserName},
+		    #{createTeamId},
+		    #{createTeamName},
+		    #{createDepartId},
+		    #{createDepartName},
+		    #{createUnitId},
+		    #{createUnitName},
+		    #{approvenPostion},
+		    #{moneyExp},
+		    #{dayExp}
+		    )
+	
+	 
+	</insert>
+	<update id="updateForMysql" parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule" >
+		update sys_approven_function_rule set rule_is_orderly=#{ruleIsOrderly}
+ 		where approven_rule_id=#{approvenRuleId}
+	</update>
+	<delete id="deleteForMysql"   parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule">
+		delete from sys_approven_function_rule where approven_rule_id = #{approvenRuleId}
+	</delete>
+	<select id="queryCountForMysql"  parameterType="com.sd.farmework.pojo.SysApprovenFunctionRule"  resultType="java.lang.Integer">
+   		select    count(*) from sys_approven_function_rule where 1=1
+	</select>
+</mapper> 
+

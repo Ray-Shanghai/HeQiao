@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css">
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/public.css">
+</head>
+<body>
+<div class="public-header-warrp">
+	<div class="public-header">
+		<div class="content">
+			<div class="public-header-logo"><img src="/HeQiao/page/heqiao/images/logo.png"></div>
+			<div class="public-header-admin fr">
+				<p class="admin-name"></p>
+				<div class="public-header-fun fr">
+					 成旅集团内部审批管理系统
+ 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+ <!-- 内容展示 -->
+<div class="public-ifame">
+	<div class="content">
+	<!-- 内容模块头 -->
+		 
+		<div class="clearfix"></div>
+		<!-- 左侧导航栏 -->
+		<div class="public-ifame-leftnav">
+			<ul class="left-nav-list">
+				<li class="public-ifame-item">
+					<a href="javascript:;">通用审批</a>
+					<div class="ifame-item-sub">
+						<ul>
+							<li class="active"><a href="../../../page/heqiao/applyNote/currency_note.html" target="content">通用申请</a></li>
+							<li><a href="../../../page/heqiao/applyNote/expenditure_note_1.html" target="content">支出申请</a></li>
+							<li><a href="../currencyNote/leaveNote.do" target="content">请假申请</a></li>
+							<!-- <li><a href="../../../page/heqiao/applyNote/leave_note_1.html" target="content">请假申请</a></li> -->
+						</ul>
+					</div>
+				</li>
+				<li class="public-ifame-item">
+					<a href="javascript:;">审批查询</a>
+					<div class="ifame-item-sub">
+						<ul>
+							<li><a class="beforeSub" href="../currencyNote/queryListByPage.do?auditStatus=1&state=0" target="content">审批中申请单</a></li>
+							<li><a href="../currencyNote/queryListByPage.do?auditStatus=3" target="content">被驳回申请单</a></li>
+						</ul>
+					</div>
+				</li>
+				<li class="public-ifame-item">
+					<a href="javascript:;">历史归档查询</a>
+					<div class="ifame-item-sub">
+						<ul>
+							<li class="active"><a href="../currencyNote/queryListByPage.do?auditStatus=2&noteType=3" target="content">通用申请单</a></li>
+							<li><a href="../currencyNote/queryListByPage.do?auditStatus=2&noteType=1" target="content">支出申请单</a></li>
+							<li><a href="../currencyNote/queryListByPage.do?auditStatus=2&noteType=2" target="content">请假申请单</a></li>
+						</ul>
+					</div>
+				</li>
+				<li class="public-ifame-item">
+					<a href="javascript:;">系统公告</a>
+					<div class="ifame-item-sub">
+						<ul>
+							<li><a href="../../..//manager/loginIn/notice/queryListByPage.do" target="content">系统公告</a></li>
+						</ul>
+					</div>
+				</li>
+
+			</ul>
+			<div class="loginInfo">
+				<ul>
+					<li>日期：${.now?string("yyyy-MM-dd")}</li>
+					<li id="time">时间：${.now?string("HH:ss")}</li>
+					<li>登录人：${userInfo.userName}</li>
+					<li><a href="userLoginOut.do">退出系统</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- 右侧内容展示部分 -->
+		<div class="public-ifame-content">
+		<iframe name="content" src="../../../page/heqiao/applyNote/currency_note.html" frameborder="0" id="mainframe" scrolling="yes" marginheight="0" marginwidth="0" width="100%" style="height:100%;"></iframe>
+		</div>
+	</div>
+</div>
+<script src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+	$("#mainframe").load(function(){
+		var user=document.getElementById("mainframe").contentWindow.document.getElementsByTagName("pre").length;
+		if(user==1){
+			alert("登录超时，请重新登录！")
+			window.location.href="/HeQiao/page/heqiao/login.html";
+		}
+	});
+});
+	var ch =window.screen.availHeight;
+	$('.public-ifame-content').height(ch-70);
+	$('.public-ifame-leftnav').height(ch-125);
+</script>
+</body>
+</html>

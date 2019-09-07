@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>公告信息</title>
+
+ 
+  
+ 	<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+	
+</head>
+<body>
+  
+  	
+  <div class="container form-horizontal">
+      <div class="row form-horizontal">
+        <div class="control-group span12">
+          <label class="control-label"><s>*</s>公告标题：</label>
+          <div class="controls">
+            <input name="noticeTitle" type="text" class="control-text" style="width:300px;" data-rules="{required:true}">
+          </div>
+        </div>
+      </div>
+      <div class="row form-horizontal">
+        <div class="control-group span12">
+          <label class="control-label"><s>*</s>公开级别：</label>
+          <div class="controls">
+            <!-- <select name="unitId">
+            	<option value="001">成旅集团</option>
+            </select> -->
+            <select name="departId">
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row form-horizontal">
+        <div class="control-group span20">
+          <label class="control-label"><s>*</s>公告内容：</label>
+          <div>
+           <textarea name="noticeContent" data-rules="{required:true}" class="span8 span-width bui-form-field" aria-disabled="false" aria-pressed="false" style="width: 500px;height: 300px;"></textarea>
+          </div>
+        </div>
+      </div>
+      <br>
+       <br>
+       <form id="form" enctype="multipart/form-data">
+		<div id="addupload" style="margin-left: 10%">
+			<a id="grid_append" class="button" onclick="addFile()">添加附件</a>
+		</div>
+		</form>
+      <hr/>
+      <div class="row">
+        <div class="form-actions offset3">
+          <button type="button" onclick="add()" class="button button-primary">保存</button>
+          <button type="button" class="button" onclick="clearData()">重置</button>
+        </div>
+      </div>
+  </div>
+  <script type="text/javascript" src="../../assets/js/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+  <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+  <script type="text/javascript">
+    BUI.use('common/page');
+  </script>
+  
+<script type="text/javascript">
+  function clearData(){
+	  $("input[name='noticeTitle']").val("");
+	  $("textarea[name='noticeContent']").val("");
+  }
+  function add(){
+    	var filePath="";
+		$.ajax({
+			type:"post",
+			url : base.serverContet+'/upload.do', 
+			data:new FormData($("#form")[0]),
+			processData : false,
+			contentType : false,
+			datetype : "json",
+			async:false,
+			success:function(data){
+				filePath=data
+			},error:function(){}
+		});
+		var fileName="";
+		$.each($("input[name='files']"),function(tag,index){
+			if($(this).val()!=""&&$(this).val()!=null){
+				var strs=$(this).val().split("\\");
+				fileName+=strs[strs.length-1]+",";
+			}
+		});
+		var data={
+				noticeTitle:$("input[name='noticeTitle']").val(),
+				/*unitId:$("select[name='unitId']").val(),
+				 unitName:$("select[name='unitId']").find("option:checked").text(), */
+				departId:$("select[name='departId']").val(),
+				departName:$("select[Name='departId']").find("option:checked").text(),
+				noticeContent:$("textarea[name='noticeContent']").val(),
+				filePath:filePath,
+				fileName:fileName
+		}
+		if($("input[name='noticeTitle']").val()!=""&&$("textarea[name='noticeContent']").val()!=""){
+    	  $.ajax({  
+       			type : 'POST',  
+        		url : base.serverContet+'/manager/loginIn/notice/addNotice.do',  
+	      		data:  data,
+	       		async : false,  
+	       		success : function(data) {  
+	         	  	if(data.code=="000"){
+	         		  BUI.Message.Alert('信息保存成功',function(){
+	         			 top.topManager.reloadPage("001002003")
+           			 	 top.topManager.closePage();
+	         	        },'info');
+	         			//让信息框按钮获取焦点
+	         		    $(".bui-stdmod-footer button").focus();
+	                	  }else{
+	             	   BUI.Message.Alert(data.msg,function(){
+	         	        },'info');
+	             		//让信息框按钮获取焦点
+	          		    $(".bui-stdmod-footer button").focus();
+	                	  }
+	       		   },error : function() {}  
+	   		});
+		}else{
+			BUI.Message.Alert("请填写完整信息！");
+			//让信息框按钮获取焦点
+   		    $(".bui-stdmod-footer button").focus();
+		}
+  }
+</script>
+<script type="text/javascript">
+function addFile() {
+	$("#addupload").after('<div style="margin-left: 10%;padding: 5px;"><input type="file" name="files" /></div>');
+}
+
+/* function queryUnit(parentDepartId){
+	$.ajax({
+		url:base.serverContet+"/manager/loginIn/SysDepartInfo/queryDepartInfoByParentId.do",
+		type:"POST",
+		data:{parentDepartId:parentDepartId+"001"},
+		success:function(data){
+			if(parentDepartId=="001"){
+				$.each(data,function(index,tag){
+					$("select[name='unitId']").eq(0).append(new Option(this.departName,this.departId));
+				});
+			}else{
+				$("select[name='departId']").html("");
+				$("select[name='departId']").eq(0).append(new Option("所有人员",""));
+				$.each(data,function(index,tag){
+					$("select[name='departId']").eq(0).append(new Option(this.departName,this.departId));
+				});
+			}
+		}
+	});
+}
+$(function(){
+	queryUnit("001");
+	queryUnit("001002001");
+	$("select[name='unitId']").change(function(){
+		var e=this;
+		if($(e).val()!="001"&&$(e).val()!=''){
+			queryUnit($(e).val());
+		}else{
+			queryUnit("001002001");
+		}
+	})
+}) */
+$(function(){
+	$.ajax({
+		url:base.serverContet+"/manager/loginIn/SysDepartInfo/queryUnitDataList.do",
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			$.each(data,function(index,tag){
+				$("select[name='departId']").append(new Option(this.departName,this.departId));
+			});
+		}
+	})
+});
+</script>
+<body>
+</html> 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.sd.farmework.mapper.HqCompanySealInfoMapper"> 
+
+	<resultMap type="com.sd.farmework.pojo.HqCompanySealInfo" id="hqcompanysealinfomap"> 
+
+		<result column="company_seal_id" property="companySealId"/>
+		<result column="company_seal_name" property="companySealName"/>
+		<result column="company_seal_desc" property="companySealDesc"/>
+		<result column="REMARK" property="remark"/>
+		<result column="STATUS" property="status"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="CREATE_USER_ID" property="createUserId"/>
+		<result column="CREATE_USER_NAME" property="createUserName"/>
+		<result column="CREATE_TEAM_ID" property="createTeamId"/>
+		<result column="CREATE_TEAM_NAME" property="createTeamName"/>
+		<result column="CREATE_DEPART_ID" property="createDepartId"/>
+		<result column="CREATE_DEPART_NAME" property="createDepartName"/>
+		<result column="CREATE_UNIT_ID" property="createUnitId"/>
+		<result column="CREATE_UNIT_NAME" property="createUnitName"/>
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime"/>
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"/>
+		<result column="LAST_UPDATE_USER_NAME" property="lastUpdateUserName"/>
+		<result column="LAST_UPDATE_TEAM_ID" property="lastUpdateTeamId"/>
+		<result column="LAST_UPDATE_TEAM_NAME" property="lastUpdateTeamName"/>
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId"/>
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName"/>
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId"/>
+		<result column="LAST_UPDATE_UNIT_NAME" property="lastUpdateUnitName"/>
+
+	</resultMap>
+	<update id="updateForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo">
+		UPDATE hq_company_seal_info set 
+		company_seal_name=#{companySealName},
+		company_seal_desc=#{companySealDesc},
+		STATUS=#{status},
+		LAST_UPDATE_TIME=now(),
+		LAST_UPDATE_USER_ID=#{lastUpdateUserId},
+		LAST_UPDATE_USER_NAME=#{lastUpdateUserName},
+		LAST_UPDATE_TEAM_ID=#{lastUpdateTeamId},
+		LAST_UPDATE_TEAM_NAME=#{lastUpdateTeamName},
+		LAST_UPDATE_DEPART_ID=#{lastUpdateDepartId},
+		LAST_UPDATE_DEPART_NAME=#{lastUpdateDepartName},
+		LAST_UPDATE_UNIT_ID=#{lastUpdateUnitId},
+		LAST_UPDATE_UNIT_NAME=#{lastUpdateUnitName}
+		where company_seal_id=#{companySealId}
+	</update>
+	<select id="queryByPkIdForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo"  resultMap="hqcompanysealinfomap">
+		SELECT 
+		t.company_seal_id,
+		t.company_seal_name,
+		t.company_seal_desc,
+		t.REMARK,
+		t.STATUS
+		FROM  hq_company_seal_info t 
+		where  1 =1 
+	</select>
+	<select id="queryForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo"  resultMap="hqcompanysealinfomap">
+		SELECT 
+		t.company_seal_id,
+		t.company_seal_name,
+		t.company_seal_desc,
+		t.REMARK,
+		t.STATUS,
+		t.CREATE_TIME,
+		t.CREATE_USER_ID,
+		t.CREATE_USER_NAME,
+		t.CREATE_TEAM_ID,
+		t.CREATE_TEAM_NAME,
+		t.CREATE_DEPART_ID,
+		t.CREATE_DEPART_NAME,
+		t.CREATE_UNIT_ID,
+		t.CREATE_UNIT_NAME,
+		t.LAST_UPDATE_TIME,
+		t.LAST_UPDATE_USER_ID,
+		t.LAST_UPDATE_USER_NAME,
+		t.LAST_UPDATE_TEAM_ID,
+		t.LAST_UPDATE_TEAM_NAME,
+		t.LAST_UPDATE_DEPART_ID,
+		t.LAST_UPDATE_DEPART_NAME,
+		t.LAST_UPDATE_UNIT_ID,
+		t.LAST_UPDATE_UNIT_NAME
+		FROM  tm_data_type_info t 
+		where  1 =1 
+	</select>
+	<select id="queryListByPageForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo"  resultMap="hqcompanysealinfomap">
+		SELECT  
+		t.company_seal_id,
+		t.company_seal_name,
+		t.company_seal_desc,
+		t.REMARK,
+		t.STATUS,
+		t.CREATE_TIME,
+		t.CREATE_USER_ID,
+		t.CREATE_USER_NAME,
+		t.CREATE_TEAM_ID,
+		t.CREATE_TEAM_NAME,
+		t.CREATE_DEPART_ID,
+		t.CREATE_DEPART_NAME,
+		t.CREATE_UNIT_ID,
+		t.CREATE_UNIT_NAME,
+		t.LAST_UPDATE_TIME,
+		t.LAST_UPDATE_USER_ID,
+		t.LAST_UPDATE_USER_NAME,
+		t.LAST_UPDATE_TEAM_ID,
+		t.LAST_UPDATE_TEAM_NAME,
+		t.LAST_UPDATE_DEPART_ID,
+		t.LAST_UPDATE_DEPART_NAME,
+		t.LAST_UPDATE_UNIT_ID,
+		t.LAST_UPDATE_UNIT_NAME
+		FROM  hq_company_seal_info t  where  1=1
+		
+		<if test="companySealName!=null">
+			and company_seal_name like concat('%',#{companySealName},'%')
+		</if>
+		
+		   LIMIT  #{startRecod},#{pageSize} 
+	</select>
+	<select id="queryListForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo"  resultMap="hqcompanysealinfomap">
+		SELECT 
+		t.company_seal_id,
+		t.company_seal_name,
+		t.company_seal_desc,
+		t.REMARK,
+		t.STATUS,
+		t.CREATE_TIME,
+		t.CREATE_USER_ID,
+		t.CREATE_USER_NAME,
+		t.CREATE_TEAM_ID,
+		t.CREATE_TEAM_NAME,
+		t.CREATE_DEPART_ID,
+		t.CREATE_DEPART_NAME,
+		t.CREATE_UNIT_ID,
+		t.CREATE_UNIT_NAME,
+		t.LAST_UPDATE_TIME,
+		t.LAST_UPDATE_USER_ID,
+		t.LAST_UPDATE_USER_NAME,
+		t.LAST_UPDATE_TEAM_ID,
+		t.LAST_UPDATE_TEAM_NAME,
+		t.LAST_UPDATE_DEPART_ID,
+		t.LAST_UPDATE_DEPART_NAME,
+		t.LAST_UPDATE_UNIT_ID,
+		t.LAST_UPDATE_UNIT_NAME
+		FROM  hq_company_seal_info t 
+		where t.STATUS='Y'
+	</select>
+	<insert id="addForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo">
+	insert into hq_company_seal_info
+	(
+		company_seal_name,
+		company_seal_desc,
+		status,
+		CREATE_TIME,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TEAM_ID,
+		CREATE_TEAM_NAME,
+		CREATE_DEPART_ID,
+		CREATE_DEPART_NAME,
+		CREATE_UNIT_ID,
+		CREATE_UNIT_NAME
+	)
+	values
+	(
+		#{companySealName},
+		#{companySealDesc},
+		#{status},
+		now(),
+	    #{createUserId},
+	    #{createUserName},
+	    #{createTeamId},
+	    #{createTeamName},
+	    #{createDepartId},
+	    #{createDepartName},
+	    #{createUnitId},
+	    #{createUnitName} 
+	)
+	</insert>
+	<delete id="deleteForMysql" parameterType="com.sd.farmework.pojo.HqCompanySealInfo">
+		delete from hq_company_seal_info where 1=2 
+	</delete>
+	<select id="queryCountForMysql"  parameterType="com.sd.farmework.pojo.HqCompanySealInfo"  resultType="java.lang.Integer">
+   		select    count(*) from hq_company_seal_info where   1=1
+		
+		<if test="companySealName!=null">
+			and company_seal_name like concat('%',#{companySealName},'%')
+		</if>
+	</select>
+</mapper> 
+

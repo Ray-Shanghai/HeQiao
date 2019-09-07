@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.sd.farmework.mapper.SysApprovenTaskedMapper"> 
+
+	<resultMap type="com.sd.farmework.pojo.SysApprovenTasked" id="SysApprovenTaskedMap"> 
+
+		<result column="TASK_ID" property="taskId"/>
+		<result column="TASK_NAME" property="taskName"/>
+		<result column="APPROVEN_PERSON_ID" property="approvenPersonId"/>
+		<result column="APPROVEN_RULE_ID" property="approvenRuleId"/>
+		<result column="APPROVEN_RULE_NAME" property="approvenRuleName"/>
+		<result column="APPROVEN_FUNCTION_ID" property="approvenFunctionId"/>
+		<result column="APPROVEN_FUNCTION_NAME" property="approvenFunctionName"/>
+		<result column="APPROVEN_USER_ID" property="approvenUserId"/>
+		<result column="APPROVEN_USER_NAME" property="approvenUserName"/>
+		<result column="RULE_ORDER" property="ruleOrder"/>
+		<result column="APPROVEN_SEND_TIME" property="approvenSendTime"/>
+		<result column="APPROVEN_END_TIME" property="approvenEndTime"/>
+		<result column="APPROVEN_RESULT" property="approvenResult"/>
+		<result column="APPROVEN_STATUS" property="approvenStatus"/>
+		<result column="SOURCE_TABLE" property="sourceTable"/>
+		<result column="SOURCE_TABLE_PK_COLUMN_NAME" property="sourceTablePkColumnName"/>
+		<result column="SOURCE_TABLE_PK_COLUMN_VALUE" property="sourceTablePkColumnValue"/>
+		<result column="APPROVEN_REMARK" property="approvenRemark"/>
+		<result column="RULE_ORDER_OLD" property="ruleOrderOld"/>
+		<result column="APPROVEN_POSTION" property="approvenPostion"/>
+		<result column="APPROVEN_POSTION_NAME" property="approvenPostionName"/>
+		<result column="approven_UNIT_ID" property="approvenUnitId"/>
+		<result column="approven_UNIT_NAME" property="approvenUnitName"/>
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="REMARK" property="remark"/>
+		<result column="STATUS" property="status"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="CREATE_USER_ID" property="createUserId"/>
+		<result column="CREATE_USER_NAME" property="createUserName"/>
+		<result column="CREATE_TEAM_ID" property="createTeamId"/>
+		<result column="CREATE_TEAM_NAME" property="createTeamName"/>
+		<result column="CREATE_DEPART_ID" property="createDepartId"/>
+		<result column="CREATE_DEPART_NAME" property="createDepartName"/>
+		<result column="CREATE_UNIT_ID" property="createUnitId"/>
+		<result column="CREATE_UNIT_Name" property="createUnitName"/>
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime"/>
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"/>
+		<result column="LAST_UPDATE_TEAM_ID" property="lastUpdateTeamId"/>
+		<result column="LAST_UPDATE_TEAM_NAME" property="lastUpdateTeamName"/>
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId"/>
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName"/>
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId"/>
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName"/>
+		<result column="approven_sign" property="approvenSign"/>
+		
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+
+	</resultMap>
+   <sql id="aprrovenTaskedSql">
+   	   task_id,
+	   task_name,
+	   approven_person_id,
+	   approven_rule_id,
+	   approven_rule_name,
+	   approven_function_id,
+	   approven_function_name,
+	   approven_user_id,
+	   approven_user_name,
+	   rule_order,
+	   approven_send_time,
+	   approven_end_time,
+	   approven_result,
+	   source_table,
+	   source_table_pk_column_name,
+	   source_table_pk_column_value,
+	   approven_remark,
+	   rule_order_old,
+	   create_time,
+	   create_user_id,
+	   create_user_name,
+	   create_team_id,
+	   create_team_name,
+	   create_depart_id,
+	   create_depart_name,
+	   create_unit_id,
+	   create_unit_name,
+	   approven_postion,
+	   approven_postion_name,
+	   approven_unit_id,
+	   approven_unit_name,
+	   approven_depart_id,
+	   approven_depart_name,
+	   approven_sign
+   </sql>
+	<select id="queryListByPage" parameterType="com.sd.farmework.pojo.SysApprovenTasked"  resultMap="SysApprovenTaskedMap">
+		select * from (
+		SELECT ROWNUM RW,a.*
+		FROM (
+		SELECT 
+		<include refid="aprrovenTaskedSql"></include>
+		FROM  sys_approven_tasked t   where APPROVEN_FUNCTION_ID=#{approvenFunctionId} and APPROVEN_USER_ID = #{approvenUserId}
+		<if test="taskId!= null and taskId != ''">
+				AND TASK_ID like '%'||#{taskId}||'%'
+			</if>
+			<if test="taskName!= null and taskName != ''">
+				AND TASK_NAME like '%'||#{taskName}||'%'
+			</if>
+			<if test="approvenUserName!= null and approvenUserName != ''"> 
+			   AND APPROVEN_USER_NAME like '%'||#{approvenUserName}||'%'
+			</if> 
+			order by approven_end_time desc
+ 		) a )
+		WHERE RW between #{pageSize} * (#{currPage} - 1) + 1 AND (#{pageSize} * (#{currPage} - 1)) + #{pageSize}
+	</select>
+	<select id="queryList" parameterType="com.sd.farmework.pojo.SysApprovenTasked"  resultMap="SysApprovenTaskedMap">
+		SELECT 
+		<include refid="aprrovenTaskedSql"></include>
+		FROM  sys_approven_tasked t  where APPROVEN_FUNCTION_ID=#{approvenFunctionId} and APPROVEN_USER_ID = #{approvenUserId}
+	</select>
+	<insert id="add">
+	insert into sys_approven_tasked
+  	(<include refid="aprrovenTaskedSql"></include>)
+   select 
+   task_id,
+   task_name,
+   approven_person_id,
+   approven_rule_id,
+   approven_rule_name,
+   approven_function_id,
+   approven_function_name,
+   #{approvenUserId},
+   #{approvenUserName},
+   rule_order,
+   approven_send_time,
+   sysdate(),
+  #{approvenResult},
+   source_table,
+   source_table_pk_column_name,
+   source_table_pk_column_value,
+   #{approvenRemark},
+   rule_order_old,
+   create_time,
+   create_user_id,
+   create_user_name,
+   create_team_id,
+   create_team_name,
+   create_depart_id,
+   create_depart_name,
+   create_unit_id,
+   create_unit_name,
+   approven_postion,
+   approven_postion_name,
+   approven_unit_id,
+   approven_unit_name,
+   approven_depart_id,
+   approven_depart_name,
+   #{approvenSign}
+   from sys_approven_task where TASK_ID=#{taskId}
+	
+	</insert>
+	<delete id="delete">
+		delete from sys_approven_tasked where 1=2 
+	</delete>
+	<select id="queryCount"  parameterType="com.sd.farmework.pojo.SysApprovenTasked"  resultType="java.lang.Integer">
+   		select    count(*) from sys_approven_tasked   where APPROVEN_FUNCTION_ID=#{approvenFunctionId} and APPROVEN_USER_ID = #{approvenUserId}
+   		<if test="taskId!= null and taskId != ''">
+				AND TASK_ID like '%'||#{taskId}||'%'
+			</if>
+			<if test="taskName!= null and taskName != ''">
+				AND TASK_NAME like '%'||#{taskName}||'%'
+			</if>
+			<if test="approvenUserName!= null and approvenUserName != ''"> 
+			   AND APPROVEN_USER_NAME like '%'||#{approvenUserName}||'%'
+			</if> 
+	</select>
+	<select id="queryFirstPerson" parameterType="com.sd.farmework.pojo.SysApprovenTasked" resultMap="SysApprovenTaskedMap">
+		SELECT
+		<include refid="aprrovenTaskedSql"></include>
+		FROM
+		sys_approven_tasked
+	    where  1 =1 and SOURCE_TABLE_PK_COLUMN_VALUE =#{sourceTablePkColumnValue} and RULE_ORDER_OLD='1'
+	 </select>
+</mapper> 
+

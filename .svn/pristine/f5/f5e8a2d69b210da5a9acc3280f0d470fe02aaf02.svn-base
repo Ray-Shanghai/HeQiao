@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户信息</title>
+
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../../resources/jquery-easyui-1.4.3/themes/icon.css">
+ 	
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+ 	<script type="text/javascript" src="../../../resources/js/base.js"></script>
+  
+ 	<link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" /> 
+<style type="text/css">
+.w66{
+	width:66px;
+}
+</style>
+</head>
+<body>
+ 	<div class="easyui-layout"  fit="true">
+		<div data-options="region:'center',iconCls:'icon-ok'"  >
+		<form id="J_Form"  class="form-horizontal" >
+      		<input type="hidden"    name="approvenFunctionId"  id="approvenFunctionId">
+			<input type="hidden"    name="approvenFunctionName" id="approvenFunctionName">
+			<input type="hidden"    name="approvenUnitId"   id="approvenUnitId">
+			<input type="hidden"    name="approvenUnitName" id="approvenUnitName">
+			
+			<input type="hidden"    name="approvenDepartId"  id="approvenDepartId">
+			<input type="hidden"    name="approvenDepartName" id="approvenDepartName">
+			
+			<input type="hidden"    name="approvenTeamId" id="approvenTeamId">
+			<input type="hidden"    name="approvenTeamName" id="approvenTeamName">
+
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>业务类型代码：</label>
+            <div class="controls" id="approvenFunctionIdDiv">
+            
+             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>业务类型名称：</label>
+            <div class="controls"  id="approvenFunctionNameDiv">
+             </div>
+             
+          </div>
+        </div>
+         <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>规则名称：</label>
+            <div class="controls">
+              <input  type="text" name="approvenRuleName"  data-rules="{required:true}" class="input-normal control-text">
+            </div>
+          </div>
+        </div>
+        <div class="control-group span20">
+            <label class="control-label"><s>*</s>审批职位：</label>
+            <div class="controls" id="depart">
+             <select id="approvenPostion"  name="approvenPostion"  data-rules="{required:true}" class="input-normal control-text">
+              		<option value="">请选择</option>
+              		<option value="1">董事长</option>
+              		<option value="2">营运长</option>
+              		<option value="3">总经理</option>
+              		<option value="4">部门总监</option>
+              		<option value="5">项目经理</option>
+              		<option value="6">财务总监</option>
+              		<option value="7">出纳</option>
+              </select>
+             </div>
+             
+          </div>
+          <div class="control-group span20" style="display:none" id="moneyDiv">
+            <label class="control-label"><s>*</s>金额：</label>
+            <div class="controls" id="depart">
+            	<input type="number" id="gtMoney" name="gtMoney" class="w66">至<input type="number" id="ltMoney" name="ltMoney"  class="w66"> 温馨提示：金额范围：如 10000-50000
+             </div>
+             
+          </div>
+           <div class="control-group span20" style="display:none" id="dayDiv">
+            <label class="control-label"><s>*</s>天数：</label>
+            <div class="controls" id="depart">
+            	<input type="number" id="gtDay" name="gtDay"  class="w66">至<input type="number" id="ltDay" name="ltDay"  class="w66"> 温馨提示：天数范围：如 1-5 
+             </div>
+             
+          </div>
+      	<div class="row" style="display:none">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>是否有序审批：</label>
+            <div class="controls">
+            <label for="statusY">有序</label>
+              <input id="statusY" type="radio" value="1" name="ruleIsOrderly" checked="checked" data-rules="{required:true}" >
+             <label for="statusN">无序</label>
+              <input id="statusN"  type="radio" value="2" name="ruleIsOrderly"  data-rules="{required:true}" >
+              
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="control-group span20">
+            <label class="control-label"><s>*</s>状态：</label>
+            <div class="controls">
+            <label for="statusY">正常</label>
+              <input id="statusY" type="radio" value="Y" name="status" checked="checked" data-rules="{required:true}" >
+             <label for="statusN">禁用</label>
+              <input id="statusN"  type="radio" value="N" name="status"  data-rules="{required:true}" >
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="control-group span15">
+            <label class="control-label">备注：</label>
+            <div class="controls control-row4">
+              <textarea name="approvenRemark" class="input-large"  data-rules="{required:true}"  type="text"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row form-actions actions-bar">
+            <div class="span8 offset3 ">
+              <button type="submit" class="button button-primary" >保存</button>
+              <button type="reset" class="button">重置</button>
+            </div>
+        </div>
+      </form>
+			</div>
+ 
+</body>
+</html>
+ <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+ <script type="text/javascript" src="../../assets/js/config-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+<script type="text/javascript" >
+	$(document).ready(function() { 
+		var approvenFunctionId ="";
+		var approvenFunctionName ="";
+
+	  	if(window.location.search.split("?").length>1){
+		    approvenFunctionId =window.location.search.split("?")[1].split("=")[1].split("&")[0];
+		    approvenFunctionName =unescape(window.location.search.split("?")[1].split("=")[2].split("&")[0]);
+		    $("#approvenFunctionId").val(approvenFunctionId);
+			$("#approvenFunctionName").val(approvenFunctionName);
+		    $("#approvenFunctionIdDiv").text(approvenFunctionId);
+			$("#approvenFunctionNameDiv").text(approvenFunctionName);
+ 	  	}
+	  	if(approvenFunctionId=="00002"){
+		  	$("#approvenPostion").change(function(){
+		  			if($(this).val()==4){
+		  				$("#moneyDiv").hide();
+		  			}else{
+		  				$("#moneyDiv").show();
+		  			}
+		  	}) 
+	  	}
+	  	if(approvenFunctionId=="00003"){
+		  	$("#approvenPostion").change(function(){
+		  			if($(this).val()==4){
+		  				$("#dayDiv").hide();
+		  			}else{
+		  				$("#dayDiv").show();
+		  			}
+		  	}) 
+	  	}
+	});
+	    
+
+	BUI.use('bui/form',function (Form) {
+	    var f1 = new Form.Form({
+	    srcNode : '#J_Form'
+	  	}).render();
+
+		$("#J_Form").submit(function() {  
+		
+		if($("#approvenPostion").val()!=8){
+			if(($("#gtMoney").val()!=""&&$("#ltMoney").val()=="")||($("#gtMoney").val()==""&&$("#ltMoney").val()!="")){
+				BUI.Message.Alert('金额范围必须都填写，或都不填写。',function(){
+		        },'info');
+				///让信息框按钮获取焦点
+      		    $(".bui-stdmod-footer button").focus();
+	 			return false;
+			}
+			if(($("#gtDay").val()!=""&&$("#ltDay").val()=="")||($("#gtDay").val()==""&&$("#ltDay").val()!="")){
+				BUI.Message.Alert('天数范围必须都填写，或都不填写。',function(){
+		        },'info');
+				//让信息框按钮获取焦点
+      		    $(".bui-stdmod-footer button").focus();
+	 			return false;
+			}
+		}
+		
+  		if(f1.isValid()){
+      		$.ajax({  
+          		type : 'POST',  
+           		url : base.serverContet+'/manager/loginIn/SysApprovenFunctionRule/saveApprovenRuleInfo.do',  
+         		data: $('#J_Form').serialize(),  
+          		async : false,  
+          		success : function(data) {  
+            	  	if(JSON.parse(data).code=="000"){
+            		  BUI.Message.Alert('信息保存成功',function(){
+            			  top.topManager.reloadPage("001001005")
+            			  top.topManager.closePage();
+            	        },'info');
+            		  	//让信息框按钮获取焦点
+            		    $(".bui-stdmod-footer button").focus();
+                   	  }else{
+                	   BUI.Message.Alert('信息保存失败，系统繁忙',function(){
+            	        },'info');
+                	   //让信息框按钮获取焦点
+             		    $(".bui-stdmod-footer button").focus();
+                   	  }
+          		   },error : function() {}  
+      		}); 
+      		return false;
+ 		}else{
+ 			BUI.Message.Alert('请确保必填项全部填写完成。',function(){
+	        },'info');
+ 			//让信息框按钮获取焦点
+  		    $(".bui-stdmod-footer button").focus();
+ 			return false;
+ 		}
+	});
+	return false;
+} );
+
+</script>

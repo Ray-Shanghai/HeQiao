@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>职位管理</title>
+ <link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="span24">
+        <h2>查询条件</h2>
+        <form id="searchForm" class="form-horizontal" tabindex="0" method="post" style="outline: none;">
+          <div class="row">
+            <div class="control-group span8">
+              <label class="control-label">职位名称：</label>
+              <div class="controls">
+                <input type="text" name="authorityName" class="control-text">
+              </div>
+            </div>
+             
+            <div class="form-actions span5">
+              <button id="btnSearch" type="submit" class="button button-primary">搜索</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div> 
+    <div class="search-grid-container">
+      <div id="grid">
+      </div>
+    </div>
+</div>
+    <script type="text/javascript" src="../../assets/js/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+  <script type="text/javascript">
+        var Grid = BUI.Grid,
+          Store = BUI.Data.Store,
+          columns = [
+            { title: '职位编号',width: 100,  sortable: false, dataIndex: 'sysId'},
+            { title: '职位名称', width: 100, sortable: true, dataIndex: 'authorityName', selectable: true },
+            { title: '职位级别',width: 100, sortable: true,  dataIndex: 'authorityId'},
+            { title: '创建时间',width: 200, sortable: true,  dataIndex: 'createTime'}
+          ];
+ 
+        var store = new Store({
+            url : base.serverContet+'/manager/loginIn/sysAuthority/queryListByPageIndex.do',
+            autoLoad:true,
+            pageSize:11
+          }),
+          grid = new Grid.Grid({
+            render:'#grid',
+            loadMask: true,
+            forceFit:true,
+            columns : columns,
+            store: store,
+            emptyDataTpl : '<div class="centered"><img alt="Crying" src="http://img03.taobaocdn.com/tps/i3/T1amCdXhXqXXXXXXXX-60-67.png"><h2>查询的数据不存在</h2></div>',
+            plugins : [Grid.Plugins.AutoFit], //勾选插件、自适应宽度插件
+            // 底部工具栏
+            tbar:{
+                items : [
+                         {text : '<i class="icon-plus"></i>新建',btnCls : 'button button-small',handler:function(){
+                        	 top.topManager.openPage({
+	        	            	    id : "authorityAdd",
+	        	            	    href : "basicPara/authority/add.html",
+	        	            	    title : "职位添加"
+     	            		});
+                         }},
+                         {text : '<i class="icon-edit"></i>编辑',btnCls : 'button button-small',handler:function(){
+ 								var selections = grid.getSelection();
+                        	 
+                        		if(selections.length==1){
+                        	 		top.topManager.openPage({
+	        	            	    id : "authorityEdit",
+	        	            	    href : "basicPara/authority/edit.html?id="+selections[0].sysId+"&name="+escape(selections[0].authorityName)+"&desc="+escape(selections[0].authorityId),
+	        	            	    title : "职位修改"
+     	            			});
+                        	 }else{
+                        		 alert("请选中下面的一行后再试！");
+                        		 //让信息框按钮获取焦点
+                       		    $(".bui-stdmod-footer button").focus();
+                        	 }
+                        	}}
+                       ]
+                     },
+            // 顶部工具栏
+            bbar : {
+              //items 也可以在此配置
+              // pagingBar:表明包含分页栏
+              pagingBar:true
+            }
+          });
+ 
+        grid.render();
+ 
+        //创建表单，表单中的日历，不需要单独初始化
+        var form = new BUI.Form.HForm({
+          srcNode : '#searchForm'
+        }).render();
+ 
+        form.on('beforesubmit',function(ev) {
+          //序列化成对象
+          var obj = form.serializeToObject();
+          obj.start = 0; //返回第一页
+          store.load(obj);
+          return false;
+        });
+         
+        
+      
+
+         
+    </script>
+<!-- script end -->
+  
+</body>
+</html>      

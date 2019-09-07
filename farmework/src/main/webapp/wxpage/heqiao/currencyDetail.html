@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes"/> 
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成旅集团内部审批管理系统申请详情</title>
+		<link rel="stylesheet" href="../../wxpage/heqiao/css/normalize.css">
+		<link rel="stylesheet" href="../../wxpage/heqiao/css/app.css" />
+		<link rel="stylesheet" href="../../wxpage/heqiao/fonts/iconfont.css" />
+		<script type="text/javascript" src="../../wxpage/heqiao/js/approven.js"></script>
+		<script type="text/javascript" src="../../wxpage/heqiao/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../../wxpage/heqiao/js/currencyDetail.js"></script>
+	    <script type="text/javascript" src="../../resources/js/base.js"></script>
+	    <script type="text/javascript" src="/HeQiao/wxpage/build/pdf.js"></script>
+		<script type="text/javascript" src="/HeQiao/wxpage/build/pdf.worker.js"></script>
+		<style type="text/css">
+			.lightbox{
+			position: fixed;
+		    top: 0px;
+		    left: 0px;
+		    height: 100%;
+		    width: 100%;
+		    z-index: 7;
+		    display: block;
+	        background-color: rgba(0, 0, 0,.3);
+		    display: none;
+		}
+		.pop,#pdfContainer{
+			position: absolute;
+		    left: 50%;
+		    top:5%;
+			width: 893px;
+		    height: 100%;
+		    margin-left: -446.5px;
+		    z-index: 9;
+		}
+		.eye{
+			width:0.05rem;
+			padding-left:0.45rem;
+		}
+		</style>		
+	</head>
+	<body class="bgcolor-blue">
+		<div class="logo"><img src="image/logo2-01.png"/></div>
+		<div class="supply-detail-content pb-100">
+			<div class="title">通用申请<p id="title"> </p></div>
+			<div class="serial-number pl-30" id="titleNum"> </div>
+			<div class="table-one">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="30%" class="info-title">申&emsp;请&emsp;人</td>
+						<td width="70%" id="createUserName"> </td>
+					</tr>
+					<tr>
+						<td width="30%" class="info-title">签&nbsp;呈&nbsp;主&nbsp;旨</td>
+						<td width="70%" id="doMain"> </td>
+					</tr>
+					<tr>
+						<td width="30%" class="info-title">签&nbsp;呈&nbsp;说&nbsp;明</td>
+						<td width="70%" id="doContent"> </td>
+					</tr>
+					<tr>
+						<td width="30%" class="info-title">送&nbsp;呈&nbsp;部&nbsp;门</td>
+						<td width="70%" id="doMainDept"> </td>
+					</tr>
+					<tr>
+						<td width="30%" class="info-title">印&nbsp;章&nbsp;申&nbsp;请</td>
+						<td width="70%" id="saleName"></td>
+					</tr>
+					<tr>
+						<td width="30%" class="info-title">用&nbsp;印&nbsp;附&nbsp;件</td>
+						<td width="70%" id="fileAattech"></td>
+					</tr>
+					<tr>
+						<td width="30%" class="info-title">文&nbsp;件&nbsp;借&nbsp;阅</td>
+						<td width="70%" id="fileName"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="table-two mt-50">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<td width="20%">签办顺序</td>
+							<td width="30%">签章</td>
+							<td width="20%">审批状态</td>
+							<td width="30%">审批时间</td>
+						</tr>
+					</thead>
+					<tbody class="approveOrder">
+					</tbody>
+				</table>
+			</div>
+			<div class="detail-btn">
+				<div class="row">
+					<div class="col-6"><a onclick="showAppreovenText(this,2,1)" class="md-blue-btn-radnone tip-cancel agree">通过</a></div>
+					<div class="col-6"><a onclick="showAppreovenText(this,3,1)" class="md-black-btn-radnone tip-cancel back">退回</a></div>
+				</div>
+			</div>
+		</div>
+		<div class="lightbox" id="lightbox">
+			<div id="pop" class="pop" style="display: none;">
+				<a href="javascript:close()"
+					style="position: absolute; z-index: 999999999;top: 6%;left: 66%;color: red; display: inline-block; width: 80px; height: 30px;"
+					id="close">关闭</a>
+				<iframe src="" frameborder="0" id="pdfContainer" name="pdfContainer" style="width:100%;heght:100%;"></iframe>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="row">
+				<div class="col-6"><a href="index.html"><span ><img class="font-image" src="image/home.png"></span>首页</a></div>
+				<div class="col-6"><a href="notice.html"><span ><img class="font-image" src="image/info.png"></span>公告</a></div>
+			</div>
+		</div>
+		<div class="tip-tc" id="remarkText">
+			<div class="tip-head">请填写您的建议</div>
+			<div class="word-ct"><textarea name="approvenRemark"></textarea></div>
+			<div class="row mt-40">
+				<div class="col-6 pl-20"><a onclick="showSignText()"  class="md-blue-btn ok">下一步</a></div>
+				<div class="col-6 pr-20"><a onclick="closeSignText()" class="md-blue-border-btn tip-cancel">取消</a></div>
+			</div>
+		</div>
+		
+	<div   id="signText" class="tip-tc1">
+			<div class="tip-head">请写下您的签名</div>
+			<div id="signature"></div>	
+			<div class="row mt-40">
+				<div class="col-6 pl-20"><a id="yes" class="md-blue-btn ok">确定</a></div>
+				<div class="col-6 pr-20"><a id="reset"  class="md-blue-border-btn tip-cancel">重签</a></div>
+			</div>
+		</div>		
+	</body>
+	<script src="js/rem.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="../jSignature/src/jSignature.js"></script>
+	<script src="../jSignature/src/plugins/jSignature.CompressorBase30.js"></script>
+	<script src="../jSignature/src/plugins/jSignature.CompressorSVG.js"></script>
+	<script src="../jSignature/src/plugins/jSignature.UndoButton.js"></script> 
+	<script src="../jSignature/src/plugins/signhere/jSignature.SignHere.js"></script> 
+    <script>
+        $(function() {
+            var $sigdiv = $("#signature");
+            $sigdiv.jSignature(); // 初始化jSignature插件.
+            $("#yes").click(function(){
+                //将画布内容转换为图片
+                var datapair = $sigdiv.jSignature("getData", "image/svg+xml;base64");
+                var  dataSign = "data:" + datapair[0] + "," + datapair[1];
+                openApproven(dataSign);
+                //$(i).appendTo($("#someelement")); // append the image (SVG) to DOM.
+            });
+            //datapair = $sigdiv.jSignature("getData","base30");
+            //$sigdiv.jSignature("setData", "data:" + datapair.join(","));
+           
+            $("#reset").click(function(){
+                $sigdiv.jSignature("reset"); //重置画布，可以进行重新作画.
+                $("#someelement").html("");
+            });
+        });
+    </script>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/bootstrap.min.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jqPaginator.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/checkAll.js"></script>
+	<script type="text/javascript" src="/HeQiao/resources/js/base.js"></script>
+
+	
+	<style type="text/css">
+		.title{
+			padding: 5%;
+		}
+		.offer{
+			color: #0098c5;
+			font-weight: bold;
+		}
+		.time{
+			color: #0098c5;
+			font-weight: bold;
+		}
+		.leaveType{
+			padding: 2%;
+			width: 5%;
+			/* border: 1px solid black; */
+			margin: 1%;
+			float: left;
+		}
+		/* .leveName{
+			float: left;
+			line-height: 17px;
+			padding-left: 1%;
+			cursor: pointer;
+		} */
+	</style>
+	<script type="text/javascript">
+		function deleteData(obj){
+			var note_id="${currencyNote.noteId}";
+			if(confirm("您真的要取消申请吗？这将删除本条数据！")){
+				$.ajax({
+					url:base.serverContet+'/manager/loginIn/currencyNote/deleteByPkId.do?noteId='+note_id,
+					type:"get",
+					async:false,
+					success:function(data){
+						if(data.code=='000'){
+							alert("取消申请成功！");
+							window.location.href="/HeQiao/manager/loginIn/currencyNote/queryListByPage.do?auditStatus=1";
+						}
+						else{
+							base.alert(data,2);
+						}
+					},error:function(reg){}
+				});
+			}
+		}
+	</script>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr>
+						<th class="th" colspan="2">请假申请流程</th>
+					</tr>
+					<tr> 
+						<td class="table_td_left ">流程标题</td>
+						<td class="table_td_right pd_left_10">${currencyNote.title}</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">发起部门</td>
+						<td class="table_td_right">
+							<span>${currencyNote.createDepartName}</span>
+							<div class="fr" style="padding-right: 30px;">${currencyNote.titleNum}</div>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">核准</td>
+						<td class="table_td_right">
+							<table class="public-cont-table">
+								<tr><td colspan="2" style="width: 15%">签办顺序</td><td style="width: 12%">签章</td><td style="width: 10%">审批状态</td><td  style="width: 53%">审批意见</td></tr>
+							<#list approvenTaksList as order>
+								<tr>
+									<td>${order.ruleOrderOld}</td>
+									<td>
+										${order.approvenDepartName}-${order.approvenPostionName}
+									</td>
+									<td>
+									<#if order.approvenSign!=null>
+ 									<img alt="" src="${order.approvenSign}" width="100%" height="100%">
+ 									</#if>
+									
+									</td>
+									<td>
+										<#if order.approvenStatus=="1">待审核 </#if>
+										<#if order.approvenResult=="1">审核通过 </#if> 
+										<#if order.approvenResult=="2">审核未通过</#if>
+									</td>
+									<td>${order.approvenRemark}</td>
+								</tr>
+							</#list>
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">申请人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+
+										<span class="title">${currencyNote.createUserName}</span>
+										<span class="title">职称</span>
+										<span class="title offer">
+											${currencyNote.postion}
+										</span> 
+									</td> 
+									<td  style="width: 20%">所在部门</td>
+									<td  style="width: 40%">
+										<span>
+											${currencyNote.createDepartName}	
+										</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">职务代理人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" >
+										<span>
+											${currencyNote.postionProxyPerson}	
+										</span>
+									</td> 
+									<td  style="width: 20%">请假类型</td>
+									<td  style="width: 40%" >
+									<span>${approvenTask.approvenFunctionName}</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">开始时间</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3">
+										<span>
+											${currencyNote.leaveStartDate}&nbsp;&nbsp;${currencyNote.leaveStartTime}		
+										</span>
+									</td> 
+									<td  style="width: 20%">结束时间</td>
+									<td  style="width: 40%">
+										<span>
+											${currencyNote.leaveEndDate}&nbsp;&nbsp;${currencyNote.leaveEndTime}
+										</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">总时长</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3">
+										<p class="time">${currencyNote.leaveTotalTime}</p>
+									</td> 
+									<td style="width: 20%">年度</td>
+									<td style="width: 40%">
+										<p class="time">${currencyNote.leaveStartDate?substring(0,4)}年</p>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					
+					<tr> 
+						<td class="table_td_left">备注信息</td>
+						<td class="table_td_right pd_left_10">
+						${currencyNote.doContent}
+						</td>
+					</tr>
+					<tr>
+						<td  colspan="2">
+							<div class="subBtn">
+								<#if currencyNote.auditStatus==1><input type="button" value="取消申请" onclick="deleteData(this)"></#if> 
+								<input type="button" onclick="javascript:history.go(-1)" value="返回">
+							</div>
+						</td>
+					</tr>
+				</table>
+				<!-- <#if currencyNote.auditStatus==1>
+					<iframe name="content" src="/HeQiao/manager/loginIn/currencyNote/queryListByPage.do?auditStatus=1&state=1" frameborder="0" id="mainframe" scrolling="yes" marginheight="0"  marginwidth="0" width="100%" style="height: 636px;"></iframe>
+				</#if> -->
+			</div>
+		</div>
+	</div>
+</body>
+</html>

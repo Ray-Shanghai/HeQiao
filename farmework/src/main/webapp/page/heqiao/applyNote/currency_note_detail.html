@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/bootstrap.min.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jqPaginator.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/checkAll.js"></script>
+	<script type="text/javascript" src="/HeQiao/resources/js/base.js"></script>
+	<script type="text/javascript" src="/HeQiao/wxpage/build/pdf.js"></script>
+	<script type="text/javascript" src="/HeQiao/wxpage/build/pdf.worker.js"></script>
+ 	<style type="text/css">
+		.lightbox{
+			position: fixed;
+		    top: 0px;
+		    left: 0px;
+		    height: 100%;
+		    width: 100%;
+		    z-index: 7;
+		    opacity: 0.3;
+		    display: block;
+		    background-color: rgb(0, 0, 0);
+		    display: none;
+		}
+		.pop,#pdfContainer{
+			position: absolute;
+		    left: 50%;
+		    top:0;
+			width: 893px;
+		    height: 100%;
+		    margin-left: -446.5px;
+		    z-index: 9;
+		}
+	</style>
+	<script type="text/javascript">
+	function showPdf(obj,isShow){
+		var url=$(obj).attr("val");
+		$("#pdfContainer").attr("src","/HeQiao/wxpage/heqiao/viewer.html?name"+url);
+		var state = "";
+		if(isShow){
+			state = "block";
+		}else{
+			state = "none";
+		}
+		var pop = document.getElementById("pop");
+		pop.style.display = state;
+		var lightbox = document.getElementById("lightbox");
+		lightbox.style.display = state;
+	}
+	function close(){
+		showPdf(false);
+	}
+    </script>
+    <script type="text/javascript">
+    	function downloadPdf(obj){
+    		var url=$(obj).attr("val");
+    		if(confirm("您真的要下载吗？")){
+    			$(obj).attr("href",url);
+    		}
+    	}
+    </script>
+	<script type="text/javascript">
+		function deleteData(obj){
+			var note_id="${currencyNote.noteId}";
+			if(confirm("您真的要取消申请吗？这将删除本条数据！")){
+				$.ajax({
+					url:base.serverContet+'/manager/loginIn/currencyNote/deleteByPkId.do?noteId='+note_id,
+					type:"get",
+					async:false,
+					success:function(data){
+						if(data.code=='000'){
+							alert("取消申请成功！");
+							window.location.href="/HeQiao/manager/loginIn/currencyNote/queryListByPage.do?auditStatus=1";
+						}
+						else{
+							base.alert(data,2);
+						}
+					},error:function(reg){}
+				});
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			if($("#jyFileName").text()!=""&&$("#jyFileName").text()){
+				 $("#jyFileNum").text($("#jyFileName").text().split(",").length);
+			}
+		});
+	</script>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr>
+						<th class="th" colspan="2">通用申请流程</th>
+					</tr>
+					<tr>
+						<td class="table_td_left ">流程标题</td>
+						<td class="table_td_right pd_left_10">${currencyNote.title}</td>
+					</tr>
+					<!-- <tr>
+						<td class="table_td_left">签办公司</td>
+						<td class="table_td_right pd_left_10">
+							${currencyNote.doSignUnitName}</td>
+						<div class="fr" style="padding-right: 30px;">${currencyNote.titleNum}</div>
+						</td>
+					</tr> -->
+					<tr>
+						<td class="table_td_left">核准</td>
+						<td class="table_td_right">
+							<table class="public-cont-table">
+								<tr>
+									<td colspan="2" style="width: 20%">签办顺序</td>
+									<td style="width: 10%">签章</td>
+									<td style="width: 10%">审批状态</td>
+									<td style="width: 60%">审批意见</td>
+								</tr>
+								<#list approvenTaksList as order>
+								<tr>
+									<td>${order.ruleOrderOld}</td>
+									<td>${order.approvenDepartName}-${order.approvenPostionName}</td>
+									<td><#if order.approvenSign!=null>
+ 									<img alt="" src="${order.approvenSign}" width="100%" height="100%">
+ 									</#if></td>
+									<td>
+										<#if order.approvenStatus=="1">待审核 </#if>
+										<#if order.approvenResult=="1">审核通过 </#if> 
+										<#if order.approvenResult=="2">审核未通过</#if>
+										</td>
+									<td>${order.approvenRemark}</td>
+								</tr>
+								</#list>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_td_left">送呈部门</td>
+						<td class="table_td_right pd_left_10">
+							${currencyNote.doSignDepartName}</td>
+					</tr>
+					<tr>
+						<td class="table_td_left">签呈主旨</td>
+						<td class="table_td_right pd_left_10">${currencyNote.doMain}
+						</td>
+					</tr>
+					<tr>
+						<td class="table_td_left">签呈说明</td>
+						<td class="table_td_right pd_left_10">
+							${currencyNote.doContent}</td>
+					</tr>
+					<tr>
+						<td class="table_td_left">协办事项</td>
+						<td class="table_td_right">
+							<table class="public-cont-table">
+								<tr>
+									<td rowspan="2">印章使用</td>
+									<td>文件名称</td>
+									<td colspan="4" class="pd_left_10" style="text-align: left;">
+										<#list fileList as file>
+										<div class="fileInfo">
+											<a onclick="showPdf(this,true)" style="cursor:pointer;" val="/HeQiao/${file.filePath}&resouceName=${file.fileName}">${file.fileName}</a>
+											<a onclick="downloadPdf(this)" style="cursor:pointer;" class="download" val="/HeQiao/${file.filePath}&resouceName=${file.fileName}">下载文件</a>
+										</div> 
+										</#list>
+									</td>
+									<td>文件份数&nbsp;&nbsp;&nbsp;&nbsp;${fileList?size}</td>
+								</tr>
+								<tr>
+									<td>所需印章</td>
+									<td colspan="5" class="pd_left_10" style="text-align: left;">
+										${currencyNote.sealName}</td>
+								</tr>
+								<tr>
+									<td rowspan="2" style="width: 15%">文件借阅</td>
+									<td>借阅文件名</td>
+									<td colspan="5" class="pd_left_10" id="jyFileName"
+										style="text-align: left;">${currencyNote.fileName}</td>
+								</tr>
+								<tr>
+									<td style="width: 15%">文件种类</td>
+									<td style="width: 10%" class="pd_left_10">
+										${currencyNote.fileTypeName}</td>
+									<td style="width: 10%">借阅份数</td>
+									<td style="width: 10%" id="jyFileNum">0</td>
+									<td style="width: 10%">归还日期</td>
+									<td style="width: 20%" class="pd_left_10">
+										${currencyNote.returnDate}</td>
+								</tr>
+
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="subBtn">
+								<#if currencyNote.auditStatus==1><input type="button"
+									value="取消申请" onclick="deleteData(this)"></#if> <input
+									type="button" onclick="javascript:history.go(-1)" value="返回">
+							</div>
+						</td>
+					</tr>
+				</table>
+				
+				<#if currencyNote.auditStatus==4><iframe name="content" id="iframe"
+					src="/HeQiao/manager/loginIn/currencyNote/queryListByPage.do?auditStatus=1&state=1"
+					frameborder="0" id="mainframe" scrolling="yes" marginheight="0"
+					marginwidth="0" width="100%" style="height: 636px;"></iframe>
+				</#if>					
+			</div>
+			<div class="lightbox" id="lightbox"></div>
+			<div id="pop" class="pop" style="display: none;">
+				<a href="javascript:close()"
+					style="position: absolute; z-index: 999999999;top: 6px;left: 66%;color: red; display: inline-block; width: 80px; height: 30px;"
+					id="close">关闭</a>
+				<iframe src="" frameborder="0" id="pdfContainer" name="pdfContainer" style="width:100%;heght:100%;"></iframe>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

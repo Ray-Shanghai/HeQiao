@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/bootstrap.min.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jqPaginator.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/checkAll.js"></script>
+	<!-- <script type="text/javascript" src="/HeQiao/page/heqiao/js/loadPerson.js"></script> -->
+	<script type="text/javascript" src="/HeQiao/resources/js/base.js"></script>
+	<style type="text/css">
+		h3 {
+			display: block;
+			font-size: 1.17em;
+			-webkit-margin-after: 1em;
+			-webkit-margin-start: 0px;
+			-webkit-margin-end: 0px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+			<div class="public-content-header">
+				<h3 style="display: inline-block;">系统公告</h3>
+			</div>
+			<div class="clearfix">
+				<form id="myForm" action="/HeQiao/manager/loginIn/notice/queryListByPage.do" method="post">
+					<input type="hidden" id="currPage" name="currPage" value="1"/>
+				</form>
+			</div>
+			<div class="public-content-cont two-col">
+				<table class="public-cont-table col-2">
+					<tr>
+						<th style="width:25%">公告标题</th>
+						<th style="width:25%">发布人</th>
+						<th style="width:25%">发布部门</th>
+						<th style="width:25%">发布时间</th>
+					</tr>
+					<#list list as list>
+						<tr>
+						  <td>
+						  	  <a class="note_type" href="../../..//manager/loginIn/notice/queryByPkIdForPc.do?noticeId=${list.noticeId}">
+							  	${list.noticeTitle}
+							  </a>
+						  </td>
+						  <td>
+						  	${list.createUserName}
+						  </td>
+						  <td>${list.departName}</td>
+						  <td>${list.createTime}</td>
+						</tr>
+					</#list>
+					<tr id="jqPage">
+						<td colspan="4">
+							<ul class="pagination" id="pagination">
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		jqPage(${totalCount},${currPage});
+	</script>
+</body>
+</html>

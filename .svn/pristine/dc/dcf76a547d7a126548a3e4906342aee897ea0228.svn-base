@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="../css/reset.css" />
+	<link rel="stylesheet" href="../css/content.css" />
+	<link rel="stylesheet" href="../js/skins/molv/laydate.css" />
+		<link rel="stylesheet" href="../js-date/skin/whyGreen/datepicker.css" />
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/laydate.js"></script>
+	<script type="text/javascript" src="../js-date/WdatePicker.js"></script>
+	<script src="../../../resources/js/base.js"></script>
+	<script src="../../../resources/js/title.js"></script>
+	<script src="../../../resources/js/queryUnitOrDepart.js"></script>
+	<style type="text/css">
+	.p_img{
+		cursor: pointer;
+    	width: 20px;    	
+    	float: right;
+    	margin-right:10px;
+    	border-radius:10px;
+	}
+	</style>
+  	<script type="text/javascript">
+  		
+		function addFile(obj){
+			var html='<input type="text" readonly="readonly" name="fileNames" class="border_input" style="width:280px;"><a href="javascript:;" class="a-upload"><input onchange="change(this,this.files)" type="file" name="files">文件上传...</a>';
+			$("#file").append("<div class=\"fileInfo\">"+html+"<img class=\"catchImage\" onclick=\"removeFile(this)\" src=\"../images/jian.png\"></div>");
+		}
+		function removeFile(obj){
+			$(obj).parent().remove();
+			$("#fileCount").text($("#file").find(".fileInfo").length);
+		}
+		
+		function addData() {
+			
+ 			if($("input[name='doMain']").val()!=""){
+				if(confirm("您确认要提交吗？")){
+					var filePath="";
+					$.ajax({
+						type:"post",
+						url : base.serverContet+'/upload.do', 
+						data:new FormData($("#form")[0]),
+						processData : false,
+						contentType : false,
+						datetype : "json",
+						async:false,
+						success:function(data){
+							filePath=data
+						},error:function(){}
+					})
+					var fileNames=new Array();
+					$("input[name='fileNames']").each(function(index,tag){
+						fileNames[index]=this.value;
+					})
+					var data={
+						filePaths:filePath,
+						fileNames:fileNames.join(","),
+						noteType:$("input[name='noteType']").val(),
+						title:$("input[name='title']").val(),
+						titleNum:$("#num").text(),
+						/* doSignUnitName:$("input[name='doSignUnitName']").val(),
+						doSignUnitId:$("input[name='doSignUnitId']").val(),*/
+						doSignDepartName:$("input[name='doSignDepartName']").val(),
+						doSignDepartId:$("input[name='doSignDepartId']").val(), 
+						doMain:$("input[name='doMain']").val(),
+						doContent:$("textarea[name='doContent']").val(),
+						sealName:$("input[name='sealName']").val(),
+						sealId:$("input[name='sealId']").val(),
+						fileName:$("input[name='fileName']").val(),
+						fileId:$("input[name='fileId']").val(),
+						fileTypeId:$("input[name='fileTypeId']").val(),
+						fileTypeName:$("input[name='fileTypeName']").val(),
+						returnDate:$("input[name='returnDate']").val()
+					}
+					$.ajax({  
+		          		type : 'POST',  
+		           		url : base.serverContet+'/manager/loginIn/currencyNote/add.do',  
+		         		data: data,  
+		          		async : false,  
+		          		success : function(data) {  
+		            	  	if(data.code=="000"){
+		            		    alert("添加成功");
+		            		    history.go(0);
+		                   	  }else{
+		                   		base.alert(data,2);
+		                	    return false;
+		                   	  }
+		          		   },error : function() {
+		          			   
+		          		   },beforeSend:function(){
+								$("#add").attr("disabled","disabled");
+						   },complete: function () {
+								$("#add").removeAttr("disabled");
+						   }
+		      		});
+				}
+			}else{
+				alert("请填写完整信息！");
+			}
+ 		}
+		
+		
+	/* getUnit(0,''); */
+	
+	$(function(){
+		/* $("select[name='doSignUnit']").change(function(){
+	  		 	getUnit(1,$(this).find("option:selected").val());
+	  		 	$("#doSignUnitId").val(($(this).find("option:selected").val()));
+	  		 	$("#doSignUnitName").val(($(this).find("option:selected").text()));
+	 	 }) 
+	 	$("select[name='doSignDepart']").change(function(){
+			 	$("#doSignDepartId").val(($(this).find("option:selected").val()));
+			 	$("#doSignDepartName").val(($(this).find("option:selected").text()));
+	 	 });  */
+		$(".p_img").click(function(){
+			$(this).parent().parent().parent().parent().parent().hide();
+		});
+		
+		$("input[name='selectSeal']").click(function(){
+			var seals=$("#showSeal").find("input[type='checkbox']:checked")
+			$("#showSeal").hide();
+			var id="";
+			var name="";
+			for (var i = 0; i < seals.length; i++) {
+				id+=seals[i].value+",";
+				name+=$(seals[i]).parent().next().text()+",";
+			}
+			$("input[name='sealName']").val(name.substring(0, name.length-1));
+			$("input[name='sealId']").val(id.substring(0, id.length-1));
+		})
+		$("input[name='selectFile']").click(function(){
+			var files=$("#showFile").find("input[type='checkbox']:checked")
+			$("#showFile").hide();
+			//借阅份数
+			$("#count").text(files.length);
+			var id="";
+			var type="";
+			var name="";
+			var typeName="";
+			
+			for (var i = 0; i < files.length; i++) {
+				id+=files[i].value.split(",")[0]+",";
+				type+=files[i].value.split(",")[1]+",";
+				name+=$(files[i]).parent().next().text()+",";
+				if(typeName.indexOf("证件")==-1){
+					if(type.split(",")[i]==1){typeName+="证件,"};
+				}
+				if(typeName.indexOf("执照")==-1){
+					if(type.split(",")[i]==2){typeName+="执照,"};
+				}
+			}
+			$("input[name='fileName']").val(name.substring(0, name.length-1));
+			$("input[name='fileId']").val(id.substring(0, id.length-1));
+			$("input[name='fileTypeId']").val(type.substring(0, type.length-1));
+			$("input[name='fileTypeName']").val(typeName.substring(0,typeName.length-1));
+		});
+		
+	});
+	//限制文件格式
+	function change(obj,files){
+		if(files[0].type=="application/pdf"){
+			var value=$(obj).val().split("\\");
+			$(obj).parent().parent().find("input[name='fileNames']").val(value[value.length-1]);
+			$("#fileCount").text($("#file").find(".fileInfo").length);
+		}else{
+			alert("提交的文件格式必须为pdf格式！");
+			$(obj).val("");
+		}
+	}
+	window.onload=setTimeout(function adddoSignDepartData(){
+		getUnit(0,'');
+		$("input[name='selectCompany']").click();
+		getUnit(1,$("input[name='doSignUnitId']").val());
+		$("input[name='selectDepart']").click();
+		/* getUnit(1,$("select[name='doSignUnit']").find("option:selected").val()); */
+		getTitle("301");
+	},100);
+	
+	function needData(state){
+		if(state=="1"){
+			$("#showDepart").hide();
+			$("#showCompany").hide();
+			$("#showFile").hide();
+			$("#showSeal").show();
+		$.ajax({
+			url:base.serverContet+"/manager/loginIn/companySealInfo/queryAll.do",
+			type:"post",
+			success:function(data){
+				$(".remove").remove();
+				if(data.list.length>0){
+					$.each(data.list,function(index,tag){
+						$("#showSeal").find(".th").parent().after('<tr class="remove"><td><input value="'+this.companySealId+'" class="checkBox" type="checkbox"/></td><td>'+this.companySealName+'</td></tr>');
+					})
+				}
+			},error:function(data){
+				
+			}
+		}); 
+		}else{
+			$("#showDepart").hide();
+			$("#showCompany").hide();
+			$("#showSeal").hide();
+			$("#showFile").show();
+			$.ajax({
+				url:base.serverContet+"/manager/loginIn/fileInfo/queryAll.do",
+				type:"post",
+				success:function(data){
+					$(".remove").remove();
+					if(data.list.length>0){
+						$.each(data.list,function(index,tag){
+							$("#showFile").find(".th").parent().after('<tr class="remove"><td><input value="'+this.fileId+','+this.fileType+'" class="checkBox" type="checkbox"/></td><td>'+this.fileName+'</td></tr>');
+						})
+					}
+				},error:function(data){
+					
+				}
+			}); 
+		}
+	}
+ 	</script>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+		
+		<input type="hidden" name="noteType" value="301" >
+		<input name="title" type="hidden">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr>
+						<th class="th" id="title" colspan="2">通用申请流程</th>
+					</tr>
+					<tr> 
+						<td class="table_td_left ">流程标题</td>
+						<td id="formTitle" class="table_td_right pd_left_10 title-company"></td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">发起部门</td>
+						<td class="table_td_right">
+							<input type="text" readonly="readonly" id="doSignDepartName"  name="doSignDepartName" class="border_input">
+							<input type="hidden" id="doSignDepartId" name="doSignDepartId" class="border_input">
+							<div class="fr" id="num" style="padding-right: 30px;"></div>
+						</td>
+					</tr>
+					<!-- 
+					<tr> 
+						<td class="table_td_left">签办公司</td>
+						<td class="table_td_right">
+							<input type="text" readonly="readonly" id="doSignUnitName"  name="doSignUnitName" class="border_input">
+							<input type="hidden" id="doSignUnitId" name="doSignUnitId" class="border_input">
+							<select name="doSignUnit">
+								    
+							</select>
+							<img onclick="queryUnit()" src="../images/find.png" class="catchImage">  
+							<div class="fr" id="num" style="padding-right: 30px;"></div>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">送呈部门</td>
+						<td class="table_td_right">
+							<input type="text" readonly="readonly" id="doSignDepartName" name="doSignDepartName" class="border_input">
+							<input type="hidden" id="doSignDepartId" name="doSignDepartId" class="border_input">
+							<select name="doSignDepart">
+								    
+							</select>
+							<img onclick="queryDepart()" src="../images/find.png" class="catchImage"> 
+						</td>
+					</tr> 
+					-->
+					<tr> 
+						<td class="table_td_left">签呈主旨</td>
+						<td class="table_td_right">
+							<input type="text" name="doMain" class="border_input" style="width: 90%"> 
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">签呈说明</td>
+						<td class="table_td_right pd_left_10">
+							<div class="form-group">
+								<textarea id="editor_id"  name="doContent"  class="form-input-textara" style="width:90%;height:300px;">
+									
+								</textarea> 
+							</div>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">协办事项</td>
+						<td class="table_td_right">
+						<form id="form" enctype='multipart/form-data' >
+							<table class="public-cont-table">
+								<tr>
+									<td rowspan="2" >印章使用</td>
+									<td>文件名称</td>
+									<td colspan="4" style="text-align: left;" id="file">
+									
+										<div class="fileInfo">
+											<input type="text" readonly="readonly" name="fileNames" class="border_input" style="width:280px;">
+											<a href="javascript:;" class="a-upload">
+											<input onchange="change(this,this.files)" type="file" name="files">文件上传...
+											</a>
+											<img class="catchImage" onclick="addFile(this)" src="../images/jia.png">
+										</div>
+									</td>
+										<td>文件份数&nbsp;&nbsp;&nbsp;&nbsp;<span id="fileCount">0</span></td></tr>
+										<tr>
+											<td>所需印章</td>
+											<td colspan="5" style="text-align: left;">
+												<input type="text" readonly="readonly" name="sealName" class="border_input">
+												<input type="hidden" name="sealId" class="border_input">
+												<img onclick="needData(1)" src="../images/find.png" class="catchImage">
+											</td>
+										</tr>
+										<tr>
+											<td rowspan="2" style="width:15%">文件借阅</td>
+											<td>借阅文件名</td>
+											<td colspan="5" style="text-align: left;">
+												<input type="text" readonly="readonly" name="fileName" class="border_input" >
+												<input type="hidden" name="fileId" class="border_input" >
+												<img onclick="needData(2)" src="../images/find.png" class="catchImage">
+											</td>
+										</tr>
+										<tr>
+											<td style="width:15%">文件种类</td>
+											<td style="width:10%"><input type="hidden" readonly="readonly" name="fileTypeId" class="border_input" style="width: 150px;"><input type="text" name="fileTypeName" class="border_input" style="width: 150px;"> </td>
+											<td style="width:10%">借阅份数</td>
+											<td style="width:10%"><span id="count"></span></td>
+											<td style="width:10%">归还日期</td>
+											<td style="width:20%"><label onclick="WdatePicker()" ><input type="text" readonly="readonly" class="border_input" style="width: 40%;cursor:pointer;" name="returnDate">
+											<img class="catchImage" src="../images/time.png"></label> 
+											</td>
+										</tr>
+									</table>
+									</form>
+								</td>
+							</tr>
+							<tr>
+								<td  colspan="2"><div class="subBtn"><input id="add" type="submit" onclick="addData()"  value="提 交"> <input type="reset" onclick="javascript:history.go(0)" value="重 填"></div></td>
+							</tr>
+						</table>
+					</div>
+					
+				</div>
+			</div>
+			<div id="showSeal" class="showBox">
+				<table>
+					<tr>
+						<th class="th" colspan="2">选择公章
+							<p class="p_img close">
+									<img src="../images/close.png"> 	
+							</p>
+						</th>
+					</tr>
+					
+					<tr>
+						<th colspan="2"><div class="subBtn"><input type="button" name="selectSeal" value="选    择"></div></th>
+					</tr>
+				</table>
+			</div>
+			<div id="showFile" class="showBox">
+				<table>
+					<tr>
+						<th class="th" colspan="2">选择文件
+							<p class="p_img close">
+									<img src="../images/close.png"> 	
+							</p>
+						</th>
+					</tr>
+					
+					<tr>
+						<th colspan="2"><div class="subBtn"><input type="button" name="selectFile" value="选    择"></div></th>
+					</tr>
+				</table>
+			</div>
+			<div id="showCompany" class="showBox">
+				<table>
+					<tr>
+						<th class="th" colspan="2">选择公司
+							<p class="p_img close">
+									<img src="../images/close.png">
+							</p>
+						</th>
+					</tr>
+					<tr>
+						<th colspan="2"><div class="subBtn"><input type="button" id="selectCompany" name="selectCompany" value="选    择"></div></th>
+					</tr>
+				</table>
+			</div>
+			<div id="showDepart" class="showBox">
+				<table>
+					<tr>
+						<th class="th" colspan="2">选择部门
+							<p class="p_img close">
+									<img src="../images/close.png"> 	
+							</p>
+						</th>
+					</tr>
+					<tr>
+						<th colspan="2"><div class="subBtn"><input type="button" id="selectDepart" name="selectDepart" value="选    择"></div></th>
+					</tr>
+				</table>
+			</div>
+		</body>
+		</html>
+		<script src="../kingediter/kindeditor-all-min.js"></script>
+		<script>
+		KindEditor.ready(function(K) {
+		     editor = K.create('textarea[name="doContent"]', { 
+ 		        uploadJson : '../kingediter/jsp/upload_json.jsp', 
+		        fileManagerJson : '../kingediter/jsp/file_manager_json.jsp', 
+		        allowFileManager : true,    
+		        afterCreate : function() { 
+		         this.sync(); 
+		        }, 
+		        afterBlur:function(){ 
+		            this.sync(); 
+		        }   });	              
+		    }); 
+		</script>

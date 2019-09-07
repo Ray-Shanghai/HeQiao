@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/bootstrap.min.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jqPaginator.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/checkAll.js"></script>
+	<!-- <script type="text/javascript" src="/HeQiao/page/heqiao/js/loadPerson.js"></script> -->
+	<script type="text/javascript" src="/HeQiao/resources/js/base.js"></script>
+	<style type="text/css">
+		h3 {
+			display: block;
+			font-size: 1.17em;
+			-webkit-margin-after: 1em;
+			-webkit-margin-start: 0px;
+			-webkit-margin-end: 0px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+			<div class="public-content-header">
+				<h3 style="display: inline-block;">被驳回申请单</h3>
+			</div>
+			<div class="clearfix">
+				<form action="../../../manager/loginIn/currencyNote/queryListByPage.do?auditStatus=3" method="post">
+					<input type="hidden" id="currPage" name="currPage" value="1"/>
+				</form>
+			</div>
+			<div class="public-content-cont two-col">
+				<table class="public-cont-table col-2">
+					<tr>
+						<th style="width:15%">申请日期</th>
+						<th style="width:25%">签呈单</th>
+						<th style="width:60%">主旨</th>
+						<!-- <th style="width:20%">目前进度</th> -->
+					</tr>
+					<#list list as list>
+						<tr>
+						  <td>${list.createTime?substring(0,10)}</td>
+						  <td>
+						   <a href="/HeQiao/manager/loginIn/currencyNote/queryByPkId.do?noteId=${list.noteId}&noteType=${list.noteType}">
+						  	<#if list.noteType?substring(0,1)=='3'>
+						  		通用申请
+						  	</#if>
+						  	<#if list.noteType?substring(0,1)=='1'>
+						  		支出申请
+						  	</#if>
+						  	<#if list.noteType?substring(0,1)=='2'>
+						  		请假申请
+						  	</#if>
+						  	</a>
+						  </td>
+						  <td>${list.doMain}</td>
+						  <!-- <td>
+						  	${list.auditStatus}
+						  </td> -->
+						</tr>
+					</#list>
+					<tr>
+						<td colspan="4">
+							<ul class="pagination" id="pagination">
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+		jqPage(${totalCount},${currPage});
+	</script>
+</html>

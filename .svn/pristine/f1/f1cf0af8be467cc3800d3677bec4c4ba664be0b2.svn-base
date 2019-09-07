@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sd.farmework.mapper.HqNoticeFileMapper">
+	<resultMap type="com.sd.farmework.pojo.HqNoticeFile" id="file">
+		<result column="file_id" property="fileId" />
+		<result column="FILE_NAME" property="fileName" />
+		<result column="FILE_PATH" property="filePath" />
+		<result column="notice_id" property="noticeId" />
+
+		<!-- 系统公共属性 必须按照规定存取数据start -->
+		<result column="REMARK" property="remark" />
+		<result column="STATUS" property="status" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="CREATE_USER_ID" property="createUserId" />
+		<result column="CREATE_USER_NAME" property="createUserName" />
+		<result column="CREATE_TEAM_ID" property="createTeamId" />
+		<result column="CREATE_TEAM_NAME" property="createTeamName" />
+		<result column="CREATE_DEPART_ID" property="createDepartId" />
+		<result column="CREATE_DEPART_NAME" property="createDepartName" />
+		<result column="CREATE_UNIT_ID" property="createUnitId" />
+		<result column="CREATE_UNIT_Name" property="createUnitName" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" />
+		<result column="LAST_UPDATE_TEAM_ID" property="lastUpdateTeamId" />
+		<result column="LAST_UPDATE_TEAM_NAME" property="lastUpdateTeamName" />
+		<result column="LAST_UPDATE_DEPART_ID" property="lastUpdateDepartId" />
+		<result column="LAST_UPDATE_DEPART_NAME" property="lastUpdateDepartName" />
+		<result column="LAST_UPDATE_UNIT_ID" property="lastUpdateUnitId" />
+		<result column="LAST_UPDATE_UNIT_Name" property="lastUpdateUnitName" />
+		<!-- 系统公共属性 必须按照规定存取数据end -->
+	</resultMap>
+
+	<insert id="addBatchForMysql" parameterType="java.util.List">
+		INSERT INTO
+		hq_notice_file(
+		FILE_NAME,
+		FILE_PATH,
+		notice_id,
+		CREATE_USER_ID,
+		CREATE_USER_NAME,
+		CREATE_TIME,
+		create_team_id,
+		create_team_name,
+		create_depart_id,
+		create_depart_name,
+		create_unit_id,
+		create_unit_name,
+		status
+		)
+		VALUES
+		<foreach collection="list" item="docs" index="index"
+			separator=","> 
+		(
+		#{docs.fileName}
+		,#{docs.filePath}
+		,#{docs.noticeId}
+		,#{docs.createUserId}
+		,#{docs.createUserName}
+		,sysdate()
+		,#{docs.createTeamId}
+		,#{docs.createTeamName}
+		,#{docs.createDepartId}
+		,#{docs.createDepartName}
+		,#{docs.createUnitId}
+		,#{docs.createUnitName}
+		,'Y'
+		)
+		</foreach>
+	</insert>
+
+	<select id="queryListForMysql" resultMap="file"
+		parameterType="com.sd.farmework.pojo.HqFileInfo">
+		select file_name,FILE_PATH from
+		hq_notice_file
+		where
+		notice_id = #{noticeId}
+	</select>
+
+</mapper>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>用户管理</title>
+ <link href="../../assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="../../assets/css/page-min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="span24">
+        <h2>查询条件</h2>
+        <form id="searchForm" class="form-horizontal" tabindex="0" method="post" style="outline: none;">
+          <div class="row">
+            <div class="control-group span8">
+              <label class="control-label">用户名：</label>
+              <div class="controls">
+                <input type="text" name="userName" class="control-text">
+              </div>
+            </div>
+            <div class="control-group span8">
+              <label class="control-label">所属单位名称：</label>
+              <div class="controls">
+                <input type="text" name="unitName" class="control-text">
+              </div>
+            </div>
+            <div class="control-group span8">
+              <label class="control-label">所属部门名称：</label>
+              <div class="controls">
+                <input type="text" name="departName" class="control-text">
+              </div>
+            </div>
+            <div class="control-group span10">
+              <label class="control-label">登录名：</label>
+              <div class="controls">
+             	<input type="text" name="loginName" class="control-text">
+            	</div>
+            </div>
+            <div class="form-actions span5">
+              <button id="btnSearch" type="submit" class="button button-primary">搜索</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div> 
+    <div class="search-grid-container">
+      <div id="grid">
+    </div>
+    </div>
+    <script type="text/javascript" src="../../assets/js/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="../../assets/js/bui-min.js"></script>
+  <script src="../../../resources/js/base.js"></script>
+  <script type="text/javascript">
+        var Grid = BUI.Grid,
+          Store = BUI.Data.Store,
+          columns = [
+            { title: '用户编号',width: 100,  sortable: false, dataIndex: 'userId'},
+            { title: '用户名称', width: 100, sortable: true, dataIndex: 'userName', selectable: true },
+            { title: '登录名', width: 150, sortable: false, dataIndex: 'loginName', selectable: true },
+            { title: '所属部门', width: 100,sortable: true,  dataIndex: 'departName'},
+            { title: '状态',width: 100, sortable: true,  dataIndex: 'status',renderer:function(value,obj){
+            	return value=="Y"?"正常":"禁用";
+            }},
+            { title: '职称',width: 100, sortable: true,  dataIndex: 'postion'},
+            { title: '职位',width: 100, sortable: true,  dataIndex: 'authorityName'},
+            { title: '职位',width: 100, sortable: true,  dataIndex: 'authorityId',visible:false},
+            { title: '创建时间',width: 200, sortable: true,  dataIndex: 'createTime'}
+          ];
+ 
+        var store = new Store({
+            url : base.serverContet+'/manager/loginIn/SysUserInfo/queryListByPageIndex.do',
+            autoLoad:true,
+            pageSize:11
+          }),
+          grid = new Grid.Grid({
+            render:'#grid',
+            loadMask: true,
+            forceFit:true,
+            columns : columns,
+            store: store,
+            emptyDataTpl : '<div class="centered"><img alt="Crying" src="http://img03.taobaocdn.com/tps/i3/T1amCdXhXqXXXXXXXX-60-67.png"><h2>查询的数据不存在</h2></div>',
+            plugins : [Grid.Plugins.AutoFit], //勾选插件、自适应宽度插件
+            // 底部工具栏
+            tbar:{
+                items : [
+                         {text : '<i class="icon-plus"></i>新建',btnCls : 'button button-small',handler:function(){
+                        	 top.topManager.openPage({
+	        	            	    id : "useradd",
+	        	            	    href : "sysManage/sysUserInfo/addSysUserInfo.html",
+	        	            	    title : "用户添加"
+     	            		});
+                         }},
+                         {text : '<i class="icon-edit"></i>编辑',btnCls : 'button button-small',handler:function(){
+ 								var selections = grid.getSelection();
+                        	 
+                        		if(selections.length==1){
+                        	 		top.topManager.openPage({
+	        	            	    id : "userUpdateSet1",
+	        	            	    href : "sysManage/sysUserInfo/editSysUserInfo.html?userId="+selections[0].userId+"&1userName="+escape(selections[0].userName)+"&loginName="+selections[0].loginName+"&uintId="+selections[0].unitId+"&unitName="+escape(selections[0].unitName)+"&departId="+selections[0].departId+"&departName="+escape(selections[0].departName)+"&teamId="+selections[0].teamId+"&teamName="+escape(selections[0].teamName)+"&status="+selections[0].status+"&oldloginPwd="+selections[0].loginPwd+"&postion="+selections[0].authorityId+"&position="+escape(selections[0].postion),
+	        	            	    title : "用户信息修改"
+     	            			});
+                        	 }else{
+                           		 BUI.Message.Alert('请选择一条要修改的数据！');
+                           	//让信息框按钮获取焦点
+                         	    $(".bui-stdmod-footer button").focus();
+                        	 }
+                        	}},
+                         {text : '<i class="icon-remove"></i>设置角色',btnCls : 'button button-small',handler : function(){
+                        	 var selections = grid.getSelection();
+                        	 
+                        	 if(selections.length==1){
+                        		
+                        		top.topManager.openPage({
+	        	            	    id : "userRoleSet1",
+	        	            	    href : "sysManage/sysUserInfo/setRoleInfo.html?userId="+selections[0].userId,
+	        	            	    title : "用户角色设置"
+        	            		});
+                        	 }else{
+                        		 alert();
+                        	 }
+                         }}
+                       ]
+                     },
+            // 顶部工具栏
+            bbar : {
+              //items 也可以在此配置
+              // pagingBar:表明包含分页栏
+              pagingBar:true
+            }
+          });
+ 
+        grid.render();
+ 
+        //创建表单，表单中的日历，不需要单独初始化
+        var form = new BUI.Form.HForm({
+          srcNode : '#searchForm'
+        }).render();
+ 
+        form.on('beforesubmit',function(ev) {
+          //序列化成对象
+          var obj = form.serializeToObject();
+          obj.start = 0; //返回第一页
+          store.load(obj);
+          return false;
+        });
+         
+        
+        //删除操作
+        function delFunction(){
+          var selections = grid.getSelection();
+          delItems(selections);
+        }
+
+        function delItems(items){
+          var ids = [];
+          BUI.each(items,function(item){
+            ids.push(item.id);
+          });
+
+          if(ids.length){
+            BUI.Message.Confirm('确认要删除选中的记录么？',function(){
+              $.ajax({
+                url : '../data/del.php',
+                dataType : 'json',
+                data : {ids : ids},
+                success : function(data){
+                  if(data.success){ //删除成功
+                   // search.load();
+                  }else{ //删除失败
+                    BUI.Message.Alert('删除失败！');
+                  //让信息框按钮获取焦点
+            	    $(".bui-stdmod-footer button").focus();
+                  }
+                }
+            });
+            },'question');
+          }
+        }
+    </script>
+<!-- script end -->
+  
+</body>
+</html>      

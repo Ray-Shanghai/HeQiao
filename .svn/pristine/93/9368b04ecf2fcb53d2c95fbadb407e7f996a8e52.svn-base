@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes"/> 
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成旅集团内部审批管理系统首页</title>
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/css/normalize.css">
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/css/app.css" />
+		<link rel="stylesheet" href="/HeQiao/wxpage/heqiao/fonts/iconfont.css" />
+		<script type="text/javascript" src="../../wxpage/heqiao/js/jquery.min.js"></script>
+    	<script type="text/javascript" src="../../wxpage/heqiao/js/approven.js"></script>
+    	<script type="text/javascript" src="../../resources/js/base.js"></script>
+		<script type="text/javascript" src="../../wxpage/heqiao/js/currencyNote.js"></script>
+	</head>
+	<body class="bgcolor-blue">
+		<div class="logo"><img src="image/logo2-01.png"/></div>
+		<div class="content pb-100">
+			<div class="detail-class" id="notice">
+				<div class="title">系统公告</div>
+				<!-- 临时添加 -->
+				<a href="login.html"><span >退出登录</span></a>
+				<div class="notice">
+					<ul class="notice-ct">
+					</ul>
+					<div class="more-notice"><a href="notice.html" class="md-blue-btn">更多公告</a></div>
+				</div>
+			</div>
+		<div class="footer">
+			<div class="row">
+				<div class="col-6"><a href="index.html"><span ><img class="font-image" src="image/home.png"></span>首页</a></div>
+				<div class="col-6"><a href="notice.html"><span ><img class="font-image" src="image/info.png"></span>公告</a></div>
+			</div>
+		</div>
+		<div class="tip-tc" id="remarkText">
+			<div class="tip-head">请填写您的建议</div>
+			<div class="word-ct"><textarea id="approvenRemark" name="approvenRemark"></textarea></div>
+			<div class="row mt-40">
+				<div class="col-6 pl-20"><a onclick="showSignText()"  class="md-blue-btn ok">下一步</a></div>
+				<div class="col-6 pr-20"><a onclick="closeSignText()" class="md-blue-border-btn tip-cancel">取消</a></div>
+				<!-- <div class="col-6 pr-20"><a onclick="openApproven(this)" class="md-blue-btn ok"></a></div>
+				<div class="col-6 pl-20"><a onclick="hideApprovenText()" class="md-blue-border-btn tip-cancel">取消</a></div> -->
+			</div>
+		</div>
+		<div   id="signText" class="tip-tc1">
+			<div class="tip-head">请写下您的签名</div>
+			<div id="signature"></div>	
+			<div class="row mt-40">
+				<div class="col-6 pl-20"><a id="yes" class="md-blue-btn ok">确定</a></div>
+				<div class="col-6 pr-20"><a id="reset"  class="md-blue-border-btn tip-cancel">重签</a></div>
+			</div>
+		</div>
+	</body>
+	<script src="js/rem.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="../jSignature/src/jSignature.js"></script>
+	<script src="../jSignature/src/plugins/jSignature.CompressorBase30.js"></script>
+	<script src="../jSignature/src/plugins/jSignature.CompressorSVG.js"></script>
+	<script src="../jSignature/src/plugins/jSignature.UndoButton.js"></script> 
+	<script src="../jSignature/src/plugins/signhere/jSignature.SignHere.js"></script> 
+    <script>
+        $(function() {
+            var $sigdiv = $("#signature");
+            $sigdiv.jSignature(); // 初始化jSignature插件.
+            $("#yes").click(function(){
+                //将画布内容转换为图片
+                var datapair = $sigdiv.jSignature("getData", "image/svg+xml;base64");
+                var  dataSign = "data:" + datapair[0] + "," + datapair[1];
+                openApproven(dataSign);
+                //$(i).appendTo($("#someelement")); // append the image (SVG) to DOM.
+            });
+            //datapair = $sigdiv.jSignature("getData","base30");
+            //$sigdiv.jSignature("setData", "data:" + datapair.join(","));
+           
+            $("#reset").click(function(){
+                $sigdiv.jSignature("reset"); //重置画布，可以进行重新作画.
+                $("#someelement").html("");
+            });
+        });
+    </script>
+</html>

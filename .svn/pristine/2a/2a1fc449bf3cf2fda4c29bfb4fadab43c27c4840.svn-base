@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>后台欢迎页</title>
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/reset.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/css/content.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/js/skins/molv/laydate.css" />
+	<link rel="stylesheet" href="/HeQiao/page/heqiao/js-date/skin/whyGreen/datepicker.css" />
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js/laydate.js"></script>
+	<script type="text/javascript" src="/HeQiao/page/heqiao/js-date/WdatePicker.js"></script>
+	<script src="/HeQiao/resources/js/base.js"></script>
+	<script src="/HeQiao/resources/js/title.js"></script>
+	<style type="text/css">
+		.title{
+			padding: 5%;
+		}
+		.offer{
+			color: #0098c5;
+			font-weight: bold;
+		}
+		.time{
+			color: #0098c5;
+			font-weight: bold;
+		}
+		.leaveType{
+			padding: 2%;
+			width: 6%;
+			/* border: 1px solid black; */
+			margin: 1%;
+			float: left;
+			cursor: pointer;
+		}
+		.p_img{
+			width: 16px;
+			height: 16px;
+			border: 1px solid black;
+			float: left;
+			margin-right: 7%;
+		}
+		.leveName{
+			float: left;
+			line-height: 17px;
+			padding-left: 1%;
+			cursor: pointer;
+		}
+	</style>
+	<script type="text/javascript"> 
+		getTitle("201");
+		/* function selectLeave(obj){
+			var showData=$(obj).siblings().eq(0).children();
+			if(showData.is(":visible")){
+				showData.hide();
+			}else{
+				$(".p_img").children().hide();
+				showData.show();
+				$("#leaveType").val($(obj).attr("val"));
+			}
+		}  */
+		function addData() {
+			if($("#relDay").val()!=""&&$("#leaveStartDate").val()!=""&&$("#leaveEndDate").val()!=""&&$("#leaveType").val()!=""&&$("input[name='doMain']").val()!=""){
+				if(confirm("您确认要提交吗？")){
+					if($("input[name='leaveTotalTime']").val()=="0天0小时"){
+							alert("请假时间不符合要求！");
+							return false;
+					}
+					$.ajax({  
+		          		type : 'POST',  
+		           		url : base.serverContet+'/manager/loginIn/currencyNote/add.do',  
+		         		data: $('#J_Form').serialize(),  
+		          		async : false,  
+		          		success : function(data) {  
+		            	  	if(data.code=="000"){
+		            		    alert("添加成功");
+		            		    history.go(0);
+		                   	  }else{
+		                   		base.alert(data,2);
+		                	    return false;
+		                   	  }
+		          		   },error : function() {
+		          			   
+		          		   },beforeSend:function(){
+								$("#add").attr("disabled","disabled");
+							},complete: function () {
+								$("#add").removeAttr("disabled");
+							}
+		      		});
+				}
+			}else{
+				alert("请填写完整信息！");
+			}
+ 		}
+		function countDate(){
+			var startDate=$("#leaveStartDate").val();
+			var startTime=$("#leaveStartTime").val();
+			var endDate=$("#leaveEndDate").val();
+			var endTime=$("#leaveEndTime").val();
+			if(startDate!=""&&endDate!=""){
+				var s_date=new Date(startDate);
+				var e_date=new Date(endDate);
+				var dayNum=(e_date-s_date)/(24*60*60*1000);
+				var houseNum=endTime.split(":")[0]-startTime.split(":")[0];
+				if(houseNum<0&&dayNum>0){
+					houseNum=houseNum+24;
+					dayNum--;
+					if(dayNum<0){
+						dayNum=0;
+					}
+				}
+				if(houseNum<0&&dayNum<1){
+					houseNum=0;
+				}
+				//$("input[name='leaveDay']").val(dayNum+"."+houseNum);
+				$("#date").text(dayNum+"天"+houseNum+"小时");
+				$("input[name='leaveTotalTime']").val(dayNum+"天"+houseNum+"小时");
+				$("#year").text(startDate.split("-")[0])
+			}
+		}	
+		function queryUser(){
+			$("#showProxyPerson").show();
+			$.ajax({  
+          		type : 'POST',  
+           		url : base.serverContet+'/manager/loginIn/currencyNote/queryUser.do',  
+          		async : false,  
+          		success : function(data) {
+          			$(".remove").remove();
+            	  	if(data.code=="000"){
+            	  		$.each(data.list,function(index,tag){
+	            	  		$("#showProxyPerson").find(".th").parent().after("<tr class='remove'><td><input class='radio' type='radio' name='radio' value='"+this.userId+"'></td><td>"+this.userName+"</td></tr>");
+            	  		})
+            	  	}else{alert(data.msg)}
+          		},error : function() {} 
+			});
+		}
+		function selectPerson(){
+			var obj=$("#showProxyPerson").find("input[type='radio']:checked");
+			$("input[name='postionProxyPerson']").val(obj.parent().next().text());
+			$("input[name='postionProxyPersonId']").val(obj.val());
+			$("#showProxyPerson").hide();
+		}
+		function queryUser2(){
+			$("#showPerson").show();
+			$.ajax({  
+	      		type : 'POST',  
+	       		url : base.serverContet+'/manager/loginIn/currencyNote/queryUser.do',  
+	      		async : false,  
+	      		success : function(data) {
+	      			$(".remove").remove();
+	        	  	if(data.code=="000"){
+	        	  		$.each(data.list,function(index,tag){
+	            	  		$("#showPerson").find(".th").parent().after("<tr class='remove'><td><input class='radio' type='radio' name='radio' value='"+this.userId+"'></td><td>"+this.userName+"</td></tr>");
+	        	  		})
+	        	  	}else{alert(data.msg)}
+	      		},error : function() {} 
+			});
+		}
+		function selectPerson2(){
+			var obj=$("#showPerson").find("input[type='radio']:checked");
+			$("input[name='approvenPersonName']").val(obj.parent().next().text());
+			$("input[name='approvenPersonId']").val(obj.val());
+			$("#showPerson").hide();
+		}
+		$(function(){
+			//取出localStorage中user对象的属性
+			$("#unitName").val(window.localStorage.getItem("unitName"));
+			$("#unitId").val(window.localStorage.getItem("unitId"));
+			$("#userName").val(window.localStorage.getItem("userName"));
+			$("#departName").val(window.localStorage.getItem("departName"));
+			$("#departId").val(window.localStorage.getItem("departId"));
+			$("#authorityName").html(window.localStorage.getItem("authorityName"));
+			$("#leaveType").val(window.localStorage.getItem("zcId"));
+			$("#noteType").val(window.localStorage.getItem("zcId"));
+			$("#zcTypeName").val(window.localStorage.getItem("zcTypeName"));
+			$("#company").val(window.localStorage.getItem("unitName"));
+			$(".catchImage").click(function(){
+				$(this).prev().click();				
+			});
+			$(".leaveType").click(function(){
+				var showData=$(this).find("img");
+				if(showData.is(":visible")){
+					showData.hide();
+				}else{
+					$(".p_img").children().hide();
+					showData.show();
+					$("#leaveType").val($(this).find(".leveName").attr("val"));
+				}
+			});
+			
+		     /* 限制文本框只能输入数字和小数点*/  
+            $(".checknumber").keyup(function(){    
+                    $(this).val($(this).val().replace(/[^0-9.]/g,''));    
+                }).bind("paste",function(){  //CTR+V事件处理    
+                    $(this).val($(this).val().replace(/[^0-9.]/g,''));     
+                }).css("ime-mode", "disabled"); //CSS设置输入法不可用    
+		});
+	</script>
+</head>
+<body marginwidth="0" marginheight="0">
+	<div class="container">
+		<div class="public-content">
+		<form id="J_Form" onsubmit="return false">
+		<input type="hidden" name="noteType"  id="noteType">
+		<input type="hidden" name="leaveType" id="leaveType">
+		
+		<input name="title" type="hidden">
+		<input name="titleNum" type="hidden">
+			<div class="public-content-cont">
+				<table class="public-cont-table">
+					<tr>
+						<th id="title" class="th" colspan="2">请假申请流程</th>
+					</tr>
+					<tr> 
+						<td class="table_td_left ">流程标题</td>
+						<td id="formTitle" class="table_td_right pd_left_10"></td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">所在部门</td>
+						<td class="table_td_right">
+							<input readonly="readonly" type="text" id="departName" name="doSignDepartName" class="border_input" > 
+							<input readonly="readonly" type="hidden" id="departId" name="doSignDepartId" class="border_input" >
+							<div class="fr" id="num" style="padding-right: 30px;"></div>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">申请人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+
+										<input readonly="readonly" type="text" id="userName" class="border_input" style="width:40%" >
+										<span class="title">职位</span>
+										<span id="authorityName" class="title offer">
+										</span> 
+									</td> 
+									<td class="table_td_left">请假类型</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<input readonly="readonly" type="text" id="zcTypeName" class="border_input" style="width:40%" > 
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">职务代理人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+										<input  readonly="readonly" type="hidden" name="postionProxyPersonId" value="">	<input readonly="readonly" type="text" value="" name="postionProxyPerson" class="border_input" style="width:80%"><img onclick="queryUser()" src="/HeQiao/page/heqiao/images/find.png" class="catchImage">
+									</td> 
+									<!-- <td class="table_td_left">请假公司</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<input readonly="readonly" type="text" id="company" class="border_input" style="width:60%"> 
+									</td> -->
+									<td class="table_td_left">审核人</td>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+										<input  readonly="readonly" type="hidden" name="approvenPersonId" value="">
+										<input readonly="readonly" type="text" value="" name="approvenPersonName" class="border_input" style="width:80%">
+										<img onclick="queryUser2()" src="/HeQiao/page/heqiao/images/find.png" class="catchImage"> 
+									</td> 
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<!-- <tr> 
+						<td class="table_td_left">职务代理人</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+									<input  readonly="readonly" type="hidden" name="postionProxyPersonId" value="">	<input readonly="readonly" type="text" value="" name="postionProxyPerson" class="border_input" style="width:80%"><img onclick="queryUser()" src="/HeQiao/page/heqiao/images/find.png" class="catchImage"> 
+									</td> 
+									<td  class="table_td_left"> </td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr> -->
+					<tr> 
+						<td class="table_td_left">开始时间</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3" class="table_td_right pd_left_10">
+										<span>
+										<label onclick="WdatePicker({minDate:'#F{$dp.$D(\'leaveStartDate\')}'})">
+											<input type="text" class="border_input" value="" name="leaveStartDate" onchange="countDate()" id="leaveStartDate" readonly="readonly"
+											 style="width: 35%;cursor:pointer;">
+											<img class="catchImage" src="/HeQiao/page/heqiao/images/time.png"> 	
+										</label>
+										</span>
+										<span style="padding: 10%;">
+										<label onclick="WdatePicker({dateFmt:'HH:mm'})">
+											<input onchange="countDate()" class="border_input" value="" type="text" name="leaveStartTime" id="leaveStartTime" readonly="readonly" 
+											 style="width: 35%;cursor:pointer;">
+											<img class="catchImage" src="/HeQiao/page/heqiao/images/time.png"> 	
+										</label>
+										</span>
+									</td> 
+									<td class="table_td_left">结束时间</td>
+									<td  style="width: 40%" class="table_td_right pd_left_10">
+										<span>
+										<label onclick="WdatePicker({minDate:'#F{$dp.$D(\'leaveStartDate\')}'})">
+											<input type="text" class="border_input" value="" onchange="countDate()" name="leaveEndDate" id="leaveEndDate" style="width: 35%;cursor:pointer;" readonly="readonly"
+											>
+											<img class="catchImage" src="/HeQiao/page/heqiao/images/time.png"> 	
+										</label>
+										</span>
+										<span style="padding: 10%;">
+										<label onclick="WdatePicker({dateFmt:'HH:mm'})" >
+											<input type="text" class="border_input" value="" onchange="countDate()" name="leaveEndTime" id="leaveEndTime"  style="width: 35%;cursor:pointer;" readonly="readonly">
+											<img class="catchImage" src="/HeQiao/page/heqiao/images/time.png"> 	
+											<!-- <button onclick="cal()" type="button">计算</button> -->
+										</label>
+										</span>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">总时长</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3">
+										<p class="time" id="date"></p>
+										<!-- <input type="hidden" name="leaveDay" value="" > -->
+										<input type="hidden" name="leaveTotalTime" value="" >
+									</td> 
+									<td class="table_td_left">年度</td>
+									<td style="width: 40%">
+										<p class="time" id="year"></p>
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">实际天数(不含假期)</td>
+						<td class="table_td_right">
+
+							<table class="public-cont-table">
+								<tr>
+									<td style="width: 40%" colspan="3">
+										<input type="text" id="relDay"  style="text-align: center;" name="leaveDay" class="border_input checknumber" value="" ><span>天</span>
+									</td> 
+									<td class="table_td_left"></td>
+									<td style="width: 40%">
+									</td>
+								</tr> 
+							</table>
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">签呈主旨</td>
+						<td class="table_td_right">
+							<input type="text" name="doMain" class="border_input" style="width: 90%"> 
+						</td>
+					</tr>
+					<tr> 
+						<td class="table_td_left">备注信息</td>
+						<td class="table_td_right pd_left_10">
+							<div class="form-group">
+								<textarea id="editor_id" name="doContent"  class="form-input-textara" style="width:90%;height:300px;">
+ 								</textarea> 
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td  colspan="2"><div class="subBtn"><input id="add" type="submit" onclick="addData()" name="" value="提 交"> <input type="reset" onclick="javascript:history.go(0)" value="重 填"></div></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		</div>
+	</div>
+	<div id="showProxyPerson" class="showBox">
+		<table>
+			<tr>
+				<th class="th" colspan="2">选择代理人
+					<p class="p_img close">
+						<img src="/HeQiao/page/heqiao/images/close.png">
+					</p>
+				</th>
+			</tr>
+			<tr>
+				<th colspan="2"><div class="subBtn"><input onclick="selectPerson()" type="button" name="selectProxyPerson" value="选    择"></div></th>
+			</tr>
+		</table>
+	</div>
+	<div id="showPerson" class="showBox">
+		<table>
+			<tr>
+				<th class="th" colspan="2">选择审核人
+					<p class="p_img close">
+							<img src="../images/close.png"> 	
+					</p>
+				</th>
+			</tr>
+			<tr>
+				<th colspan="2"><div class="subBtn"><input type="button" onclick="selectPerson2();" value="选    择"></div></th>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
+<script src="/HeQiao/page/heqiao/kingediter/kindeditor-all-min.js"></script>
+<script>
+KindEditor.ready(function(K) {
+    editor = K.create('textarea[name="doContent"]', { 
+       uploadJson : '/HeQiao/page/heqiao/kingediter/jsp/upload_json.jsp', 
+	   fileManagerJson : '/HeQiao/page/heqiao/kingediter/jsp/file_manager_json.jsp',
+       allowFileManager : true,    
+       afterCreate : function() { 
+        this.sync(); 
+       }, 
+       afterBlur:function(){ 
+           this.sync(); 
+       }   });	              
+   }); 
+</script>
